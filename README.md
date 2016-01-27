@@ -13,3 +13,6 @@ called *The Lunchtime Attack*.
 
 [Sam Scott](https://github.com/samscott89/)  
 [Rob Lee](https://github.com/rpl226/)  
+[Rachel Player](https://github.com/rachelplayer)  
+
+
