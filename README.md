@@ -12,3 +12,4 @@ called *The Lunchtime Attack*.
 ## Contributors
 
 [Sam Scott](https://github.com/samscott89/)
+[Rachel Player](https://github.com/rachelplayer)
