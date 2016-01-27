@@ -11,5 +11,5 @@ called *The Lunchtime Attack*.
 
 ## Contributors
 
-[Sam Scott](https://github.com/samscott89/)
-[Rob Lee](https://github.com/rpl226/)
+[Sam Scott](https://github.com/samscott89/)  
+[Rob Lee](https://github.com/rpl226/)  
