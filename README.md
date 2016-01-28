@@ -15,7 +15,6 @@ called *The Lunchtime Attack*.
 [Rob Lee](https://github.com/rpl226/)  
 [Rachel Player](https://github.com/rachelplayer)  
 [Jonathan Hoyland](https://github.com/jhoyla)
-
 [James Alderman](https://github.com/jamesalderman)
 
 
