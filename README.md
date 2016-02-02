@@ -17,4 +17,5 @@ called *The Lunchtime Attack*.
 [Jonathan Hoyland](https://github.com/jhoyla)   
 [James Alderman](https://github.com/jamesalderman)  
 [Dan Hutchinson](https://github.com/dojh342)  
-[Jake Massimo] (https://github.com/jbeatz)
+[Jake Massimo] (https://github.com/jbeatz)  
+[Thalia Laing] (https://github.com/thaliamay)
