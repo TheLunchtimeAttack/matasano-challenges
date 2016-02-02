@@ -18,6 +18,6 @@ called *The Lunchtime Attack*.
 [James Alderman](https://github.com/jamesalderman)  
 [Dan Hutchinson](https://github.com/dojh342)  
 [Jake Massimo] (https://github.com/jbeatz)  
-[Thalia Laing] (https://github.com/thaliamay)
+[Thalia Laing] (https://github.com/thaliamay)  
 [Ben Curtis] (https://github.com/BenC7) 
 
