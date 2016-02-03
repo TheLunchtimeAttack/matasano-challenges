@@ -6,6 +6,8 @@
 
 \usepackage{algpseudocode, algorithm}
 
+\usepackage{../util/cryptocode}
+
 \begin{document}
 
 \title{Challenge 1}
@@ -42,10 +44,9 @@ Since a single character of hex is 4 bits, and a character of base64 is 6 bits,
 we can see that three hex characters can be converted to two base64 characters:
 
 \begin{align*}
- &h_2 \cdot 16^2 + h_1 \cdot 16 + h_0 \\
-= &h_2 \cdot 16^2 + (h_1^{(1)}\cdot 4 + h_1^{(2)})\cdot 16 + h_0 \\
-= &h_2 \cdot 256 + h_1^{(1)} \cdot 64 + h_1^{(2)}\cdot 16 + h_0 \\
-= &(4h_2 + h_1^{(1)})\cdot64 + (16 h_1^{(2)} + h_0)
+ h_2 \cdot 16^2 + h_1 \cdot 16 + h_0 &= h_2 \cdot 16^2 + (h_1^{(1)}\cdot 4 + h_1^{(2)})\cdot 16 + h_0 \\
+&= h_2 \cdot 256 + h_1^{(1)} \cdot 64 + h_1^{(2)}\cdot 16 + h_0 \\
+&= (4h_2 + h_1^{(1)})\cdot64 + (16 h_1^{(2)} + h_0)
 \end{align*}
 where $h_1^{(1)}\cdot 4 + h_1^{(2)}$ is the base4 representation of $h_1$.
 
@@ -55,7 +56,13 @@ $16 h_1^{(2)} + h_0 < 64$.
 This is clear since $h_2 \leq 15$ so $4h_2 \leq 60$ and $ h_1^{(1)} \leq 3$.
 
 Similarly, $h_1^{(2)} \leq 3$, so $16 h_1^{(2)} \leq 48$ and $h_2 \leq 15$.
+
+First attempt at pseudocode. We need to iterate the following process:
+\begin{enumerate}
+    \item Let $\verb+hex_string+ = h_{\ell}\,h_{\ell-1}\dots h_0$.
+    \item Take $h_0, h_1, h_2$ and express as binary $b_0 b_1 b_2 \dots b_{11}$.
+    \item Convert $b_0b_1 \dots b_5$ to base64 representation, and similarly
+    for $b_6, \dots b_{11}.$
+\end{enumerate}
 % section solution (end)
-
-
 \end{document}
