@@ -21,4 +21,6 @@ called *The Lunchtime Attack*.
 [Thalia Laing] (https://github.com/thaliamay)  
 [Ben Curtis] (https://github.com/BenC7)  
 [Alex Davidson](https://github.com/alxdavids)    
-[Thyla van der Merwe](https://github.com/tvdmerwe)
+[Thyla van der Merwe](https://github.com/tvdmerwe)  
+[Ela Berners-Lee](https:/github.com/elabl)  
+
