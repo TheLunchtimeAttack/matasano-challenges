@@ -17,13 +17,15 @@ def combine_hex(first, second): # puts 4 9 into one byte value 48
 
 def read_hex(input): # puts together byte values of the combined characters
 	byteVals=[]
+	if len(input)%2!=0:
+		print "Woah, odd number of hex characters duuuuuuuuude."
 	for i in xrange(0,len(input)-1,2):
 		byteVals.append(combine_hex(hex2byte(input[i]),hex2byte(input[i+1])))
 	return byteVals
 
 def base64_splitter(input): # splits hex bytes into base 64 bytes
-	while len(input)%3!=0: # pads input to multiple of 3
-		input.append(0)
+	#while len(input)%3!=0: # pads input to multiple of 3
+		#input.append(0)
 	output=[]
 	for i in xrange(0, len(input)-2,3): # 3 hex bytes to 4 base64 bytes
 		output1=input[i]>>2 # 00123456
@@ -38,25 +40,31 @@ def base64_splitter(input): # splits hex bytes into base 64 bytes
 		output.append(output4)
 	return output
 
-def to_base64(values): # returns the base64 byte characters
-	characters=""
-	for i in range(0, len(values)):
-		if 0<= values[i] and values[i]<=25: # uppercase to ascii
-			char=chr(values[i]+65)
-		elif 26<= values[i] and values[i]<=51: # lowercase to ascii
-			char=chr(values[i]+71)
-		elif 52<= values[i] and values[i]<=61: # integers to ascii
-			char=chr(values[i]-4)
-		elif values[i]==62: # +
-			char=chr(43)
-		elif values[i]==63: # /
-			char=chr(47)
-		else:
-			raise ValueError('Invalid base64 input')
-		characters+=char
-	return characters
+def to_base64(inputNum): # returns the base64 byte characters
+	if 0<= inputNum and inputNum<=25: # uppercase to ascii
+		return chr(inputNum+65)
+	elif 26<= inputNum and inputNum<=51: # lowercase to ascii
+		return chr(inputNum+71)
+	elif 52<= inputNum and inputNum<=61: # integers to ascii
+		return chr(inputNum-4)
+	elif inputNum==62: # +
+		return chr(43)
+	elif inputNum==63: # /
+		return chr(47)
+	else:
+		raise ValueError('Invalid base64 input')
 
 def byte_to_base64(input):
- 	temp=converters.base64_splitter(input)
-	base64=converters.to_base64(temp)
-
+	length=len(input)
+	print length
+	while len(input)%3!=0: # pads input to multiple of 3
+		input.append(0)
+ 	temp=base64_splitter(input)
+ 	outputString = ""
+ 	for i in range(0,len(temp)):
+		outputString+=to_base64(temp[i])
+	if length%3==1:
+		outputString = outputString[:len(outputString) - 2] + '=='
+	elif length%3==2:
+		outputString = outputString[:len(outputString) - 1] + '='
+	return outputString
