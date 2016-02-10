@@ -1,4 +1,4 @@
-def hex2byte(charIn):
+def hex_to_byte(charIn):
 	charIn=ord(charIn) # converts charIn to its integer value (ascii)
 	if 48<= charIn and charIn <=57: # converts integers to dec values
 		charIn=charIn-48
@@ -18,16 +18,16 @@ def combine_hex(first, second): # puts 4 9 into one byte value 48
 def read_hex(input): # puts together byte values of the combined characters
 	byteVals=[]
 	if len(input)%2!=0:
-		print "Woah, odd number of hex characters duuuuuuuuude."
-	for i in xrange(0,len(input)-1,2):
-		byteVals.append(combine_hex(hex2byte(input[i]),hex2byte(input[i+1])))
+		print("Woah, odd number of hex characters duuuuuuuuude.")
+	for i in range(0,len(input)-1,2):
+		byteVals.append(combine_hex(hex_to_byte(input[i]),hex_to_byte(input[i+1])))
 	return byteVals
 
 def base64_splitter(input): # splits hex bytes into base 64 bytes
 	#while len(input)%3!=0: # pads input to multiple of 3
 		#input.append(0)
 	output=[]
-	for i in xrange(0, len(input)-2,3): # 3 hex bytes to 4 base64 bytes
+	for i in range(0, len(input)-2,3): # 3 hex bytes to 4 base64 bytes
 		output1=input[i]>>2 # 00123456
 		output.append(output1)
 		temp= 0b00000011 & input[i] # temp is 00000078
@@ -54,14 +54,14 @@ def to_base64(inputNum): # returns the base64 byte characters
 	else:
 		raise ValueError('Invalid base64 input')
 
-def byte_to_base64(input):
+def bytes_to_base64(input):
 	length=len(input)
-	print length
+	# print(length)
 	while len(input)%3!=0: # pads input to multiple of 3
 		input.append(0)
- 	temp=base64_splitter(input)
- 	outputString = ""
- 	for i in range(0,len(temp)):
+	temp=base64_splitter(input)
+	outputString = ""
+	for i in range(0,len(temp)):
 		outputString+=to_base64(temp[i])
 	if length%3==1:
 		outputString = outputString[:len(outputString) - 2] + '=='
