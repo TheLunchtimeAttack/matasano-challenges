@@ -10,11 +10,11 @@ int main() {
 	MatasanoConverter m;
 	
 	m.loadString(hexInput, "hex");
-	result = m.getBase64();
+	result = m.getStringOutput("b64");
 	
 	cout << "Challenge 1: ";
 	if (result.compare(testString) == 0) {
-		cout << "PASSED" << endl << "Input: " << hexInput << endl << "Output: " << result << endl << "As Required.";
+		cout << "PASSED" << endl << "Input: " << hexInput << endl << "Output: " << result << endl << "As Required." << endl;
 	} else {
 		cout << "FAILED" << endl << "Input: " << hexInput << endl << "Expected: " << testString << endl << "Observed: " << result << endl;
 	}
