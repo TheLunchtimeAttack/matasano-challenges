@@ -6,7 +6,7 @@
 // styled according to the Google C++ Style guide
 // https://google.github.io/styleguide/cppguide.html
 
-class MatasanoUtils {
+class MatasanoUtil {
 private:
 	
 public:
