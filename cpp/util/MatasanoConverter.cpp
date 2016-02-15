@@ -184,7 +184,7 @@ std::vector<uint8_t> MatasanoConverter::GetBytes() {
 	return converter_data;
 }
 
-void MatasanoConverter::LoadBytes(std::vector<uint8_t eight_bit_number_array) {
+void MatasanoConverter::LoadBytes(std::vector<uint8_t> eight_bit_number_array) {
 	converter_data = eight_bit_number_array;
 }
 
