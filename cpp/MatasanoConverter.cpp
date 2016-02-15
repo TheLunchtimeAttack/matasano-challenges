@@ -1,4 +1,4 @@
-#include"matasano-converter.h"
+#include"MatasanoConverter.h"
 #include<iostream>
 #include<iomanip>
 using namespace std;
@@ -54,7 +54,9 @@ void MatasanoConverter::hexStringInput(string inputString) {
 }
 
 void MatasanoConverter::loadString(string inputString, string inputType) {
-	if (inputType.compare("hex") == 0) {
+	//this function uses an if statement and the hexStringInput function to allow for easy expansion of the MatasanoConverter class
+	//e.g. for base64 input
+	if (inputType.compare("hex") == 0 || inputType.compare("Hex") == 0 || inputType.compare("h") == 0) { 
 		hexStringInput(inputString);
 	} else {
 		throw invalid_argument("inputString: unknown inputType.");
@@ -62,7 +64,6 @@ void MatasanoConverter::loadString(string inputString, string inputType) {
 }
 
 char MatasanoConverter::base64Character(uint8_t base64Number) {
-	char out;
 	if (0 <= base64Number && base64Number <= 25) { //upper case characters
 		return (char) base64Number + 65;
 	} else if (26 <= base64Number && base64Number <= 51) { //lower case characters
@@ -79,7 +80,12 @@ char MatasanoConverter::base64Character(uint8_t base64Number) {
 }
 
 string MatasanoConverter::getBase64() {
-	return "blah";
+	//need to pad
+	
+	//need to split into bytes
+	
+	//need to iterate over bytes to get characters
+	return "";
 }
 
 void MatasanoConverter::test() {

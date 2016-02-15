@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "matasano-converter.h"
+#include "MatasanoConverter.h"
 using namespace std;
 
 int main() {
