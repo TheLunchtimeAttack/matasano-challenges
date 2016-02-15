@@ -1,7 +1,4 @@
 #include"MatasanoConverter.h"
-#include<iostream>
-#include<iomanip>
-using namespace std;
 
 uint8_t MatasanoConverter::numberFromHexChar(char hexCharacter) {
 	//cout << hexCharacter << endl;
@@ -22,14 +19,14 @@ vector<uint8_t> MatasanoConverter::base64Splitter(vector<uint8_t> eightBitNumber
 	vector<uint8_t> base64Output;
 	base64Output.clear(); //may be redundant
 	
-	for (int i = 0; i < converterData.size(); i+=3) { //three 8 bit numbers are taken at once and converted into four 6 bit numbers
-		temp = converterData[i] >> 2;
+	for (int i = 0; i < eightBitNumberArray.size(); i+=3) { //three 8 bit numbers are taken at once and converted into four 6 bit numbers
+		temp = eightBitNumberArray[i] >> 2;
 		base64Output.push_back(temp);
-		temp = (converterData[ i ] & 0x3) << 4 | converterData[i+1] >> 4;
+		temp = (eightBitNumberArray[ i ] & 0x3) << 4 | eightBitNumberArray[i+1] >> 4;
 		base64Output.push_back(temp);
-		temp = (converterData[i+1] & 0xF) << 2 | converterData[i+2] >> 6;
+		temp = (eightBitNumberArray[i+1] & 0xF) << 2 | eightBitNumberArray[i+2] >> 6;
 		base64Output.push_back(temp);
-		temp = converterData[i+2] & 0x3F;
+		temp = eightBitNumberArray[i+2] & 0x3F;
 		base64Output.push_back(temp);
 	}
 	
@@ -38,7 +35,18 @@ vector<uint8_t> MatasanoConverter::base64Splitter(vector<uint8_t> eightBitNumber
 
 
 vector<uint8_t> MatasanoConverter::hexSplitter(vector<uint8_t> eightBitNumberArray) {
-	//TODO
+	uint8_t temp;
+	vector<uint8_t> hexOutput;
+	hexOutput.clear(); //may be redundant
+	
+	for (int i = 0; i < eightBitNumberArray.size(); i++) {
+		temp = eightBitNumberArray[i] >> 4;
+		hexOutput.push_back(temp);
+		temp = eightBitNumberArray[i] & 0xF;
+		hexOutput.push_back(temp);
+	}
+	
+	return hexOutput;
 }
 
 
@@ -60,7 +68,13 @@ char MatasanoConverter::base64Character(uint8_t base64Number) {
 
 
 char MatasanoConverter::hexCharacter(uint8_t hexNumber) {
-	//TODO
+	if (0 <= hexNumber && hexNumber <= 9) {
+		return (char) hexNumber + 48;
+	} else if (10 <= hexNumber && hexNumber <= 15) {
+		return (char) hexNumber + 87;
+	} else {
+		throw invalid_argument("hexCharacter: invalid hex number (not a number 0-15)");
+	}
 }
 
 
@@ -81,7 +95,6 @@ void MatasanoConverter::hexStringInput(string inputString) {
 	converterData.clear();
 	
 	for(uint32_t i = 0; i < max; i+=2) {
-		//loop over array
 		a = numberFromHexChar(inputString[i]);
 		b = numberFromHexChar(inputString[i + 1]);
 		converterData.push_back( combineHex( a , b ) );
@@ -103,9 +116,8 @@ void MatasanoConverter::loadString(string inputString, string inputType) {
 string MatasanoConverter::getBase64() {
 	vector<uint8_t> outputDataCopy = converterData; //create copy that can be safely modified if needed
 	char paddingBytes; //counter to record number of bytes added - value will be 0, 1 or 2
-	string base64String;
+	string base64String = "";
 
-	//pad the input if required	
 	if (converterData.size() % 3 == 1) {
 		//add two pad bytes
 		outputDataCopy.push_back(0);
@@ -126,19 +138,40 @@ string MatasanoConverter::getBase64() {
 		base64String += base64Character(outputDataCopy[i]);
 	}
 	
+	if (paddingBytes == 1) {
+		base64String.replace(base64String.length() - 2, 2, "=", 0, 1);
+	} else if (paddingBytes == 2) {
+		base64String.replace(base64String.length() - 3, 3, "==", 0, 2);
+	}
+	
 	outputDataCopy.clear(); //destroy the vector as the copy is no longer needed
 	
 	return base64String;
 }
 
+string MatasanoConverter::getHex() {
+	vector<uint8_t> outputDataCopy = converterData; //create copy that can be safely modified if needed
+	string hexString = "";
+	
+	outputDataCopy = hexSplitter(outputDataCopy);
+	
+	for (int i = 0; i < outputDataCopy.size(); i++) {
+		hexString += hexCharacter(outputDataCopy[i]);
+	}
+	
+	return hexString;
+}
 
 string MatasanoConverter::getStringOutput(string outputType) {
-	if (outputType.compare("base64") == 0 || outputType.compare("b64") == 0 || outputType.compare("Base64") == 0 || outputType.compare("B64") {
+	string temp; //needed for upper case hex output
+	if (outputType.compare("base64") == 0 || outputType.compare("b64") == 0 || outputType.compare("Base64") == 0 || outputType.compare("B64") == 0) {
 		return getBase64();	
-	} else if (outputType.compare("hex") == 0 || outputType.compare("h") == 0) {
+	} else if (outputType.compare("hex") == 0 || outputType.compare("h") == 0) { //returns lower case hex output
 		return getHex();
-	} else if (outputType.compare("H") == 0 || outputType.compare("Hex") == 0) {
-		return toupper(getHex());
+	} else if (outputType.compare("H") == 0 || outputType.compare("Hex") == 0 || outputType.compare("HEX") == 0) { //returns upper case hex output
+		temp = getHex();
+		transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+		return temp;
 	} else {
 		throw invalid_argument("outputString: unknown outputType.");
 	}
