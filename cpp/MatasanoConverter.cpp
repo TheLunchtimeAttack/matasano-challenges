@@ -79,18 +79,52 @@ char MatasanoConverter::base64Character(uint8_t base64Number) {
 	}
 }
 
-string MatasanoConverter::getBase64() {
-	//need to pad
+vector<uint8_t> MatasanoConverter::base64Splitter(vector<uint8_t> eightBitNumberArray) {
+	uint8_t temp;
+	vector<uint8_t> base64Output;
+	base64Output.clear(); //may be redundant
 	
-	//need to split into bytes
+	for (int i = 0; i < converterData.size(); i+=3) { //three 8 bit numbers are taken at once and converted into four 6 bit numbers
+		temp = converterData[i] >> 2;
+		base64Output.push_back(temp);
+		temp = (converterData[ i ] & 0x3) << 4 | converterData[i+1] >> 4;
+		base64Output.push_back(temp);
+		temp = (converterData[i+1] & 0xF) << 2 | converterData[i+2] >> 6;
+		base64Output.push_back(temp);
+		temp = converterData[i+2] & 0x3F;
+		base64Output.push_back(temp);
+	}
 	
-	//need to iterate over bytes to get characters
-	return "";
+	return base64Output;
 }
 
-void MatasanoConverter::test() {
-	int temp;
-	cout << "vector contains " << converterData.size() << " elements:" << endl;
-	cout << "testing base64Character 10=" << base64Character(10) << " 26=" << base64Character(26) << " 63=" << base64Character(63) << endl;
+string MatasanoConverter::getBase64() {
+	vector<uint8_t> outputDataCopy = converterData; //create copy that can be safely modified if needed
+	char paddingBytes; //counter to record number of bytes added - value will be 0, 1 or 2
+	string base64String;
+
+	//pad the input if required	
+	if (converterData.size() % 3 == 1) {
+		//add two pad bytes
+		outputDataCopy.push_back(0);
+		outputDataCopy.push_back(0);
+		paddingBytes = 2;
+	} else if (converterData.size() % 3 == 2) {
+		//add one pad byte
+		outputDataCopy.push_back(0);
+		paddingBytes = 1;
+	} else {
+		//no padding required
+		paddingBytes = 0;
+	}
 	
+	outputDataCopy = base64Splitter(outputDataCopy);
+	
+	for (int i = 0; i < outputDataCopy.size(); i++) {
+		base64String += base64Character(outputDataCopy[i]);
+	}
+	
+	outputDataCopy.clear(); //destroy the vector as the copy is no longer needed
+	
+	return base64String;
 }

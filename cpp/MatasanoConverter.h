@@ -17,7 +17,6 @@ public:
 	void loadString(string inputString, string inputType);
 	string getBase64();
 	string getHex();
-	void test();
 };
 
 
