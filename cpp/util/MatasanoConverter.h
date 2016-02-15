@@ -21,7 +21,7 @@ private:
 	std::string GetHexString();
 public:
 	std::vector<uint8_t> GetBytes();
-	void InputBytes(std::vector<uint8_t> eight_bit_number_array);
+	void LoadBytes(std::vector<uint8_t> eight_bit_number_array);
 	void LoadString(std::string input_string, std::string input_type);
 	std::string GetStringOutput(std::string output_type);
 };

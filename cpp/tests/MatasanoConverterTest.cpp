@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "MatasanoConverter.h"
+#include "../util/MatasanoConverter.h"
 
 void MatasanoConverterTest(MatasanoConverter m, std::string input, std::string inputType, std::string expectedOutput, std::string outputType) {
 	std::string result;
@@ -15,15 +15,11 @@ void MatasanoConverterTest(MatasanoConverter m, std::string input, std::string i
 	}
 }
 
-
 int main() {
-	std::string test_input = ("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"); //Matasano Challenge 1 input
-	std::string test_output = ("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"); //Matasano Challenge 1 expected output
+	std::string test_input;
+	std::string test_output;
 	MatasanoConverter m;
 		
-	std::cout << "Challenge 1: ";
-	MatasanoConverterTest(m, test_input, "hex", test_output, "b64");
-	
 	//Sam Standard case
 	std::cout << "Sam tests: " << std::endl << "Test 1: ";
 	test_input = "deadbeef1234";
