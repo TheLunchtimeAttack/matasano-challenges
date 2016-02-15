@@ -3,24 +3,27 @@
 #include<stdexcept>
 #include<vector>
 #include<algorithm>
-using namespace std;
+
+// styled according to the Google C++ Style guide
+// https://google.github.io/styleguide/cppguide.html
 
 class MatasanoConverter {
 private:
-	vector<uint8_t> converterData;
-	uint8_t numberFromHexChar(char hexCharacter);
-	vector<uint8_t> base64Splitter(vector<uint8_t> eightBitNumberArray);
-	vector<uint8_t> hexSplitter(vector<uint8_t> eightBitNumberAray);
-	char base64Character(uint8_t base64Number);
-	char hexCharacter(uint8_t hexNumber);
-	uint8_t combineHex(uint8_t MSB, uint8_t LSB);
-	void hexStringInput(string inputString);
-	string getBase64();
-	string getHex();
+	std::vector<uint8_t> converter_data;
+	uint8_t NumberFromHexChar(char hex_character);
+	std::vector<uint8_t> Base64Splitter(std::vector<uint8_t> eight_bit_number_array);
+	std::vector<uint8_t> HexSplitter(std::vector<uint8_t> eight_bit_number_array);
+	char Base64Character(uint8_t base_64_number);
+	char HexCharacter(uint8_t hex_number);
+	uint8_t CombineHex(uint8_t msb, uint8_t lsb);
+	void HexStringInput(std::string input_string);
+	std::string GetBase64String();
+	std::string GetHexString();
 public:
-	void inputBytes(vector<uint8_t> EightBitNumberArray);
-	void loadString(string inputString, string inputType);
-	string getStringOutput(string outputType);
+	std::vector<uint8_t> GetBytes();
+	void InputBytes(std::vector<uint8_t> eight_bit_number_array);
+	void LoadString(std::string input_string, std::string input_type);
+	std::string GetStringOutput(std::string output_type);
 };
 
 
