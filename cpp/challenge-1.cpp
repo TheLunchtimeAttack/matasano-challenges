@@ -51,4 +51,6 @@ int main() {
     test_input = "BA5EBA11";
     test_output = "ul66EQ==";
 	MatasanoConverterTest(m, test_input, "hex", test_output, "b64");
+	
+	return 0;
 }
