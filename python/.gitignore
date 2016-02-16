@@ -51,6 +51,7 @@ coverage.xml
 
 # Django stuff:
 *.log
+local_settings.py
 
 # Sphinx documentation
 docs/_build/
@@ -58,10 +59,9 @@ docs/_build/
 # PyBuilder
 target/
 
-#Ipython Notebook
+# Ipython Notebook
 .ipynb_checkpoints
 
-#Mac OS 
-.DS_Store
-
+# pyenv
+.python-version
 
