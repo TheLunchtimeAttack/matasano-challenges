@@ -31,9 +31,9 @@ def xor_of_two_hexstrings(hexs1, hexs2):
     :param hexs2: a python string type of hexadecimal characters only
     :return: the bitwise XOR of the two hexnumbers, given as a hexadecimal python string
     """
-    lhs = make_hexstring_a_decimal(hexs1)
-    rhs = make_hexstring_a_decimal(hexs2)
-    xored_num = lhs ^ rhs
+    hex1int = make_hexstring_a_decimal(hexs1)
+    hex2int = make_hexstring_a_decimal(hexs2)
+    xored_num = hex1int ^ hex2int
     return int_number_to_hex_string(xored_num)
 
 
@@ -50,7 +50,7 @@ def xor_of_n_hexstrings(*hexs):
             assert char in HexChars
     length = len(hexs)  # I will use this a lot
     if length == 0:
-        return 0        # Nothing XORed together gives 0 (warning, this is an int type, not a str type)
+        return ""        # Nothing XORed together gives a null string (a str type)
     elif length == 1:
         return hexs[0]  # hexs[0] is the ONLY element in the tuple
     else:
@@ -60,7 +60,7 @@ def xor_of_n_hexstrings(*hexs):
         del init_lhs, init_rhs  # Free up redundant space by deleting these two auxillary variables
         for i in range(2, length):  # iterate over i = 2, 3, 4, ...., length - 1  [not length]
             init ^= make_hexstring_a_decimal(hexs[i])  # In python, "a ^= b" is shorthand for "a = a ^ b"
-        return int_number_to_hex_string(init)           # ... the same trick works for +, -, *, /, //, ** and % too
+        return int_number_to_hex_string(init)            # ... the same trick works for +, -, *, /, //, ** and % too
 
 
 def xor_of_n_hexstrings__alternate(hexs):
@@ -86,7 +86,7 @@ def xor_of_n_hexstrings__alternate(hexs):
         del init_lhs, init_rhs  # Free up redundant space by deleting these two auxillary variables
         for i in range(2, length):  # iterate over i = 2, 3, 4, ...., length - 1  [not length]
             init ^= make_hexstring_a_decimal(hexs[i])  # In python, "a ^= b" is shorthand for "a = a ^ b"
-        return int_number_to_hex_string(init)           # ... the same trick works for +, -, *, /, //, ** and % too
+        return int_number_to_hex_string(init)            # ... the same trick works for +, -, *, /, //, ** and % too
 
 
 if __name__ == "__main__":
