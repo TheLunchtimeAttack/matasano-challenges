@@ -115,3 +115,38 @@ def bytes_to_base64(eightbitnumbers):
     elif length%3==2:
         outputstring = outputstring[:len(outputstring) - 1] + '='
     return outputstring
+
+def to_hex(inputnum):
+    """
+    A function that takes a 4 bit number as input and returns a one character string of the hex character representing that number
+    
+    :param inputnum: an 8 bit integer
+    :return: a string of length 1
+    """
+    assert type(inputnum) == int
+    
+    if 0 <= inputnum and inputnum <= 9:
+        return chr(inputnum + 48)
+    elif 10 <= inputnum and inputnum <= 15:
+        return chr(inputnum + 87)
+    else:
+        raise ValueError('to_hex: Invalid hex character')
+
+def bytes_to_hex_string(eightbitnumbers):
+    """
+    Converts a list of 8 bit numbers into an ASCII encoded hex string
+    
+    :param eightbitnumbers: a list of integers
+    :return: a string of ASCII characters
+    """
+    assert type(eightbitnumbers) == list
+    for x in eightbitnumbers:
+        assert type(x) == int
+    
+    outputstring = ""
+    
+    for x in range(len(eightbitnumbers)):
+        outputstring += to_hex(eightbitnumbers[x] >> 4) #select 4 msb from eightbitnumbers[x]
+        outputstring += to_hex(eightbitnumbers[x] & 0xF) #select 4 lsb from eightbitnumbers[x]
+    
+    return outputstring
