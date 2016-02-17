@@ -105,7 +105,7 @@ def bytes_to_base64(eightbitnumbers):
         assert type(x) == int
     length=len(eightbitnumbers)
     while len(eightbitnumbers)%3!=0: # pads input to multiple of 3
-        input.append(0)
+        eightbitnumbers.append(0)
     temp=base64_splitter(eightbitnumbers)
     outputstring = ""
     for i in range(0,len(temp)):
