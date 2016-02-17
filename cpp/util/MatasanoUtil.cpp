@@ -16,3 +16,4 @@ std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vecto
 	
 	return output_vector;
 }
+
