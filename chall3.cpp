@@ -5,6 +5,8 @@
 
 using namespace	std;
 
+const static int BYTE_LENGTH = 16*16;
+
 // Takes two hex characters and returns a byte
 unsigned short hex_to_byte(string hex) {
 	unsigned short byte = 0;
@@ -43,15 +45,10 @@ static string hex_to_byte_xor_to_hex(string hex, string hex1) {
     return ret_hex;
 }
 
-int main(int argc, char** argv) {
-	string encrypted_hex = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
-	char e = 'e';
-	unsigned short e_byte = e - 0;
+int *produce_count_array(string encrypted_hex) {
 	int len = encrypted_hex.length();
-	string *hex_array = new string[len/2];
 	short *byte_array = new short[len/2];
-	int count[16*16] = {0};
-	int max = 0;
+	int *count = new int[BYTE_LENGTH];
 
 	for (int i=0; i<len; i=i+2) {
 		string two_byte_hex = encrypted_hex.substr(i,2);
@@ -76,6 +73,17 @@ int main(int argc, char** argv) {
 
 	}
 
+	delete [] byte_array;
+	return count;
+}
+
+int main(int argc, char** argv) {
+	string encrypted_hex = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
+	int len = encrypted_hex.length();
+	int max = 0;
+
+	int *count = produce_count_array(encrypted_hex);
+
 	unsigned short possible_char[26] = {0};
 	for (char i='A'; i<='Z'; i++) {
 		unsigned short z = i - 0;
@@ -86,14 +94,14 @@ int main(int argc, char** argv) {
 		unsigned short poss_byte = possible_char[j];
 		unsigned short xor_byte = poss_byte ^ max;
 		bool weirdness = false;
-		// cout << xor_byte << endl;
 		stringstream hex_stream;
 		hex_stream << std::hex << xor_byte;
 		string hex_xor;
 		for (int i=0;i<len/2;i++) {
 			hex_xor += hex_stream.str();
 		}
-	
+		
+		// Does the initial decryption
 		string ret_hex = hex_to_byte_xor_to_hex(encrypted_hex,hex_xor);
 		if (ret_hex != "0"){
 	        stringstream ss1;
@@ -104,6 +112,7 @@ int main(int argc, char** argv) {
 	        	// Check that all the characters are either letters, spaces or apostrophes
 	        	if (!((byte_hex >= 65 && byte_hex <= 90) || (byte_hex >= 97 && byte_hex <= 122) || byte_hex == 32 || byte_hex == 39)) {
 	        		weirdness = true;
+	        		break;
 	        	}
 	        	ss1 << (char)byte_hex;
 	        }
@@ -119,5 +128,4 @@ int main(int argc, char** argv) {
 	        cout << hex_xor.length() << endl;
 	    }
 	}
-	delete [] hex_array;
 }
