@@ -3,8 +3,6 @@
 // styled according to the Google C++ Style guide
 // https://google.github.io/styleguide/cppguide.html
 
-#define PUNCTUATION_THRESHOLD 5
-
 std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vector<uint8_t> second_input) {
 	std::vector<uint8_t> output_vector;
 		
@@ -67,3 +65,5 @@ std::vector<TestString> FilterExcessivePunctuation(std::vector<TestString> input
 	
 	return output_strings;
 }
+
+

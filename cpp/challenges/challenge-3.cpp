@@ -16,23 +16,11 @@
 //How? Devise some method for "scoring" a piece of English plaintext. 
 //Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 
-
-
 std::vector<uint8_t> CreateXorVector(uint8_t xor_character, uint32_t size) {
 	std::vector<uint8_t> out;
 	
 	for (uint32_t i = 0; i < size; i++) {
 		out.push_back(xor_character);
-	}
-	
-	return out;
-}
-
-std::string StringFromVector(std::vector<uint8_t> input_vector) {
-	std::string out = "";
-	
-	for (uint32_t i = 0; i < input_vector.size(); i++) {
-		out += (char) input_vector[i];
 	}
 	
 	return out;
@@ -54,21 +42,19 @@ std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) 
 	
 	xor_vector = CreateXorVector(0, input_bytes.size());
 	xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
-	xor_output_string = StringFromVector(xor_output_bytes);
+	xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
 	output_strings.push_back(CreateTestString(xor_output_string, xor_character));
 	
 	for (xor_character = 1; xor_character != 0; xor_character++) {
 		//test all potential i's
 		xor_vector = CreateXorVector(xor_character, input_bytes.size());
 		xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
-		xor_output_string = StringFromVector(xor_output_bytes);
+		xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
 		output_strings.push_back(CreateTestString(xor_output_string, xor_character));
 	}
 	
 	return output_strings;
 }
-
-
 
 int main() {
 	std::string input_string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";

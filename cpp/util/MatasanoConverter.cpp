@@ -15,7 +15,6 @@ uint8_t NumberFromHexChar(char hex_character) {
 	}
 }
 
-
 std::vector<uint8_t> Base64Splitter(std::vector<uint8_t> eight_bit_number_array) {
 	uint8_t temp;
 	std::vector<uint8_t> base_64_output;
@@ -35,7 +34,6 @@ std::vector<uint8_t> Base64Splitter(std::vector<uint8_t> eight_bit_number_array)
 	return base_64_output;
 }
 
-
 std::vector<uint8_t> HexSplitter(std::vector<uint8_t> eight_bit_number_array) {
 	uint8_t temp;
 	std::vector<uint8_t> hex_output;
@@ -50,7 +48,6 @@ std::vector<uint8_t> HexSplitter(std::vector<uint8_t> eight_bit_number_array) {
 	
 	return hex_output;
 }
-
 
 char Base64Character(uint8_t base_64_number) {
 	if (0 <= base_64_number && base_64_number <= 25) { //upper case characters
@@ -68,7 +65,6 @@ char Base64Character(uint8_t base_64_number) {
 	}
 }
 
-
 char HexCharacter(uint8_t hex_number) {
 	if (0 <= hex_number && hex_number <= 9) {
 		return (char) hex_number + 48;
@@ -78,7 +74,6 @@ char HexCharacter(uint8_t hex_number) {
 		throw std::invalid_argument("HexCharacter: invalid hex number (not a number 0-15)");
 	}
 }
-
 
 uint8_t CombineHex(uint8_t msb, uint8_t lsb) {
 	return (msb << 4) | lsb;
@@ -155,6 +150,16 @@ std::vector<uint8_t> HexStringConvert(std::string input_string) {
 	return output_vector;
 }
 
+std::string StringFromVectorASCII(std::vector<uint8_t> input_vector) {
+	std::string out = "";
+	
+	for (uint32_t i = 0; i < input_vector.size(); i++) {
+		out += (char) input_vector[i];
+	}
+	
+	return out;
+}
+
 std::string StringFromByteVector(std::vector<uint8_t> input_vector, std::string output_type) {
 	std::string temp; //needed for upper case hex output
 	if (output_type.compare("base64") == 0 || output_type.compare("b64") == 0 || output_type.compare("Base64") == 0 || output_type.compare("B64") == 0) {
@@ -165,6 +170,8 @@ std::string StringFromByteVector(std::vector<uint8_t> input_vector, std::string 
 		temp = GetHexString(input_vector);
 		transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
 		return temp;
+	} else if (output_type.compare("ASCII") == 0 || output_type.compare("ascii") == 0) {
+		return StringFromVectorASCII(input_vector);
 	} else {
 		throw std::invalid_argument("GetStringOutput: unknown output_type.");
 	}
@@ -179,4 +186,5 @@ std::vector<uint8_t> ByteVectorFromString(std::string input_string, std::string 
 		throw std::invalid_argument("inputString: unknown inputType.");
 	}
 }
+
 
