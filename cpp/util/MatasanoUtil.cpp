@@ -3,7 +3,7 @@
 // styled according to the Google C++ Style guide
 // https://google.github.io/styleguide/cppguide.html
 
-std::vector<uint8_t> MatasanoUtil::XorByteVectors(std::vector<uint8_t> first_input, std::vector<uint8_t> second_input) {
+std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vector<uint8_t> second_input) {
 	std::vector<uint8_t> output_vector;
 		
 	if (first_input.size() != second_input.size()) {
@@ -16,3 +16,4 @@ std::vector<uint8_t> MatasanoUtil::XorByteVectors(std::vector<uint8_t> first_inp
 	
 	return output_vector;
 }
+

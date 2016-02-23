@@ -6,9 +6,5 @@
 // styled according to the Google C++ Style guide
 // https://google.github.io/styleguide/cppguide.html
 
-class MatasanoUtil {
-private:
-	
-public:
-	std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vector<uint8_t> second_input);
-};
+std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vector<uint8_t> second_input);
+

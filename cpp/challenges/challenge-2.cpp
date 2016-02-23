@@ -23,21 +23,15 @@ int main() {
 	std::string input_2_string = "686974207468652062756c6c277320657965";
 	std::string expected_output_string = "746865206b696420646f6e277420706c6179";
 	std::string xor_output_string;
-	MatasanoConverter m;
-	MatasanoUtil u;
 	std::vector<uint8_t> input_1_bytes;
 	std::vector<uint8_t> input_2_bytes;
 	std::vector<uint8_t> xor_output_bytes;
 	
-	m.LoadString(input_1_string, "hex");
-	input_1_bytes = m.GetBytes();
+	input_1_bytes = ByteVectorFromString(input_1_string, "hex");
+	input_2_bytes = ByteVectorFromString(input_2_string, "hex");
 	
-	m.LoadString(input_2_string, "hex");
-	input_2_bytes = m.GetBytes();
-	
-	xor_output_bytes = u.XorByteVectors(input_1_bytes, input_2_bytes);
-	m.LoadBytes(xor_output_bytes);
-	xor_output_string = m.GetStringOutput("hex");
+	xor_output_bytes = XorByteVectors(input_1_bytes, input_2_bytes);
+	xor_output_string = StringFromByteVector(xor_output_bytes, "hex");
 	
 	std::cout << "Matasano Challenge 2:" << std::endl << "Input 1: " << input_1_string << std::endl << "Input 2: " << input_2_string << std::endl;
 	std::cout << "Output:  " << xor_output_string << std::endl;
@@ -50,3 +44,4 @@ int main() {
 	
 	return 0;
 }
+

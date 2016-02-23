@@ -5,11 +5,11 @@
 int main() {
 	std::string hex_input = ("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"); //Matasano Challenge 1 input
 	std::string b64_output = ("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"); //Matasano Challenge 1 expected output
-	MatasanoConverter m;
+	std::vector<uint8_t> byte_vector;
 	std::string converter_output;	
 	
-	m.LoadString(hex_input, "hex");
-	converter_output = m.GetStringOutput("b64");
+	byte_vector = ByteVectorFromString(hex_input, "hex");
+	converter_output = StringFromByteVector(byte_vector, "b64");
 	std::cout << "Challenge 1: " << std::endl << "Hex input string: " << hex_input << std::endl;
 	std::cout << "Base64 output: " << converter_output << std::endl;
 	
@@ -21,3 +21,4 @@ int main() {
 		
 	return 0;
 }
+
