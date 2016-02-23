@@ -15,7 +15,6 @@ uint8_t NumberFromHexChar(char hex_character) {
 	}
 }
 
-
 std::vector<uint8_t> Base64Splitter(std::vector<uint8_t> eight_bit_number_array) {
 	uint8_t temp;
 	std::vector<uint8_t> base_64_output;
@@ -35,7 +34,6 @@ std::vector<uint8_t> Base64Splitter(std::vector<uint8_t> eight_bit_number_array)
 	return base_64_output;
 }
 
-
 std::vector<uint8_t> HexSplitter(std::vector<uint8_t> eight_bit_number_array) {
 	uint8_t temp;
 	std::vector<uint8_t> hex_output;
@@ -50,7 +48,6 @@ std::vector<uint8_t> HexSplitter(std::vector<uint8_t> eight_bit_number_array) {
 	
 	return hex_output;
 }
-
 
 char Base64Character(uint8_t base_64_number) {
 	if (0 <= base_64_number && base_64_number <= 25) { //upper case characters
@@ -68,7 +65,6 @@ char Base64Character(uint8_t base_64_number) {
 	}
 }
 
-
 char HexCharacter(uint8_t hex_number) {
 	if (0 <= hex_number && hex_number <= 9) {
 		return (char) hex_number + 48;
@@ -78,7 +74,6 @@ char HexCharacter(uint8_t hex_number) {
 		throw std::invalid_argument("HexCharacter: invalid hex number (not a number 0-15)");
 	}
 }
-
 
 uint8_t CombineHex(uint8_t msb, uint8_t lsb) {
 	return (msb << 4) | lsb;

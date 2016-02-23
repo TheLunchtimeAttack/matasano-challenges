@@ -16,8 +16,6 @@
 //How? Devise some method for "scoring" a piece of English plaintext. 
 //Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 
-
-
 std::vector<uint8_t> CreateXorVector(uint8_t xor_character, uint32_t size) {
 	std::vector<uint8_t> out;
 	
@@ -57,8 +55,6 @@ std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) 
 	
 	return output_strings;
 }
-
-
 
 int main() {
 	std::string input_string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
