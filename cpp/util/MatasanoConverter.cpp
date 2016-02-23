@@ -155,6 +155,16 @@ std::vector<uint8_t> HexStringConvert(std::string input_string) {
 	return output_vector;
 }
 
+std::string StringFromVectorASCII(std::vector<uint8_t> input_vector) {
+	std::string out = "";
+	
+	for (uint32_t i = 0; i < input_vector.size(); i++) {
+		out += (char) input_vector[i];
+	}
+	
+	return out;
+}
+
 std::string StringFromByteVector(std::vector<uint8_t> input_vector, std::string output_type) {
 	std::string temp; //needed for upper case hex output
 	if (output_type.compare("base64") == 0 || output_type.compare("b64") == 0 || output_type.compare("Base64") == 0 || output_type.compare("B64") == 0) {
@@ -165,6 +175,8 @@ std::string StringFromByteVector(std::vector<uint8_t> input_vector, std::string 
 		temp = GetHexString(input_vector);
 		transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
 		return temp;
+	} else if (output_type.compare("ASCII") == 0 || output_type.compare("ascii") == 0) {
+		return StringFromVectorASCII(input_vector);
 	} else {
 		throw std::invalid_argument("GetStringOutput: unknown output_type.");
 	}
@@ -179,4 +191,5 @@ std::vector<uint8_t> ByteVectorFromString(std::string input_string, std::string 
 		throw std::invalid_argument("inputString: unknown inputType.");
 	}
 }
+
 
