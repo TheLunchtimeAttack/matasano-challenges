@@ -1,12 +1,12 @@
-// #include "chall2.h"
 #include <string>
 #include "xor_helper.h"
 
 int main(int argc, char** argv) {
 	std::string encrypted_hex = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 	int len = encrypted_hex.length();
+	xor_helper x;
 
-	int *count = xor_helper::produce_count_array(encrypted_hex);
+	int *count = x.produce_count_array(encrypted_hex);
 
 	unsigned short possible_char[26] = {0};
 	for (char i='A'; i<='Z'; i++) {
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 		possible_char[z-65] = z;
 	}
 
-	xor_helper::print_candidates(possible_char, encrypted_hex, len);
+	x.print_candidates(possible_char, encrypted_hex, len);
 
 	delete [] count;
 }

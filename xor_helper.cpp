@@ -5,17 +5,17 @@
 #include <stdlib.h>
 #include "xor_helper.h"
 
-const static int BYTE_LENGTH = 16*16;
+//const int xor_helper::BYTE_LENGTH = 16*16;
 
 // Takes two hex characters and returns a byte
-unsigned short hex_to_byte(std::string hex) {
+unsigned short xor_helper::hex_to_byte(std::string hex) {
 	unsigned short byte = 0;
 	std::istringstream iss(hex);
 	iss >> std::hex >> byte;
 	return byte;
 }
 
-unsigned short *hex_xor_to_byte_arr(std::string hex, std::string hex1) { 
+unsigned short* xor_helper::hex_xor_to_byte_arr(std::string hex, std::string hex1) { 
     int size = hex.length();
     int size2 = hex1.length();
     unsigned short *byte_arr = new unsigned short[size/2];
@@ -42,7 +42,7 @@ unsigned short *hex_xor_to_byte_arr(std::string hex, std::string hex1) {
 }
 
 // Function from challenge 2 but couldn't get it to work in different file.
-std::string byte_arr_to_hex_str(std::string hex, std::string hex1) {
+std::string xor_helper::byte_arr_to_hex_str(std::string hex, std::string hex1) {
     unsigned short *byte_arr = hex_xor_to_byte_arr(hex,hex1);
     std::stringstream ss;
     for (int i=0; i<(hex.size())/2; i++)
@@ -54,7 +54,7 @@ std::string byte_arr_to_hex_str(std::string hex, std::string hex1) {
     return ret_hex;
 }
 
-int *produce_count_array(std::string encrypted_hex) {
+int* xor_helper::produce_count_array(std::string encrypted_hex) {
 	int len = encrypted_hex.length();
 	short *byte_array = new short[len/2];
 	int *count = new int[BYTE_LENGTH];
@@ -86,10 +86,10 @@ int *produce_count_array(std::string encrypted_hex) {
 	return count;
 }
 
-void print_candidates(unsigned short possible_char[], std::string encrypted_hex, int hexlen) {
+void xor_helper::print_candidates(unsigned short possible_char[], std::string encrypted_hex, int hexlen) {
 	for (int j=0; j<26;j++) {
 		unsigned short poss_byte = possible_char[j];
-		bool weirdness = false;
+		int weirdness = 0;
 		std::stringstream hex_stream;
 		hex_stream << std::hex << poss_byte;
 		std::string hex_xor;
@@ -104,17 +104,25 @@ void print_candidates(unsigned short possible_char[], std::string encrypted_hex,
         for (int i=0; i<newlen; i=i+2) {
         	std::string pair_hex = ret_hex.substr(i,2);
         	unsigned short byte_hex = hex_to_byte(pair_hex);
-        	// Check that all the characters are either letters, spaces or apostrophes
-        	if (!((byte_hex >= 65 && byte_hex <= 90) || (byte_hex >= 97 && byte_hex <= 122) || byte_hex == 32 || byte_hex == 39)) {
-        		weirdness = true;
-        		break;
+
+        	// Check that all the characters are either letters, spaces, question/exclamation marks, numbers or apostrophes
+        	if (!((byte_hex >= 65 && byte_hex <= 90) || (byte_hex >= 97 && byte_hex <= 122) || byte_hex == 32 
+                    || (byte_hex < 58 && byte_hex > 47)) && !(byte_hex < 32) && !(byte_hex > 126)) {
+        		weirdness++;
         	}
+
+            if (byte_hex < 32 || byte_hex > 126) {
+                weirdness += 5;
+            }
         	ss1 << (char)byte_hex;
         }
         ss1 << std::endl;
-        if (!weirdness) {
+        // Edit this weirdness value based on results
+        if (weirdness<2) {
+            std::cout << "encrypted_hex: " << encrypted_hex << std::endl;
             std::cout << "Decryption: " << ss1.str();
             std::cout << "Encryption character: " << (char)possible_char[j] << std::endl;
+            std::cout << "weirdness: " << weirdness << std::endl;
        	}
 	}
 }
