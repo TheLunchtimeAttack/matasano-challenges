@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "../util/MatasanoConverter.h"
 #include "../util/MatasanoUtil.h"
+#include "../util/StringTesting.h"
 
 #define PUNCTUATION_THRESHOLD 5
 
