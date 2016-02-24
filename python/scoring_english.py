@@ -45,7 +45,7 @@ def pair_freq(pair, text):
     assert (type(pair) == str and len(pair) == 2)
     count = 0
     for word in text:
-        count += word.count("pair")
+        count += word.count(pair)
     return count
 
 
