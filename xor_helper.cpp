@@ -35,7 +35,7 @@ unsigned short* xor_helper::hex_xor_to_byte_arr(std::string hex, std::string hex
         }
     }
     else {
-    	std::cout << "The lengths of strings are inequal." << std::endl << "Exiting..." << std::endl;
+    	std::cout << "The lengths of strings are unequal." << std::endl << "Exiting..." << std::endl;
         exit(EXIT_FAILURE);
     }
     return byte_arr;
@@ -75,7 +75,6 @@ int* xor_helper::produce_count_array(std::string encrypted_hex) {
 			for (int k=0; k<len/2; k++) {
 				if (hex_byte == byte_array[k]) {
 					count[((i)*16)+j]++;	
-					// std::cout << "i= " << i << ", j= " << j << ", count= " << count[((i-1)*16)+j] << std::endl;
 				}
 			}
 		}
