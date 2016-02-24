@@ -17,3 +17,13 @@ std::vector<uint8_t> XorByteVectors(std::vector<uint8_t> first_input, std::vecto
 	return output_vector;
 }
 
+std::vector<uint8_t> CreateSingleCharacterXorVector(uint8_t xor_character, uint32_t size) {
+	std::vector<uint8_t> out;
+	
+	for (uint32_t i = 0; i < size; i++) {
+		out.push_back(xor_character);
+	}
+	
+	return out;
+}
+

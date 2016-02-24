@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "../util/MatasanoConverter.h"
 #include "../util/MatasanoUtil.h"
+#include "../util/StringTesting.h"
 
 #define PUNCTUATION_THRESHOLD 5
 
@@ -16,23 +17,6 @@
 //How? Devise some method for "scoring" a piece of English plaintext. 
 //Character frequency is a good metric. Evaluate each output and choose the one with the best score.
 
-std::vector<uint8_t> CreateXorVector(uint8_t xor_character, uint32_t size) {
-	std::vector<uint8_t> out;
-	
-	for (uint32_t i = 0; i < size; i++) {
-		out.push_back(xor_character);
-	}
-	
-	return out;
-}
-
-TestString CreateTestString(std::string input_string, uint8_t input_key) {
-	TestString t;
-	t.s = input_string;
-	t.key = input_key;
-	return t;
-}
-
 std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) {
 	std::string xor_output_string;
 	uint8_t xor_character;
@@ -40,14 +24,14 @@ std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) 
 	std::vector<uint8_t> xor_output_bytes;
 	std::vector<TestString> output_strings;
 	
-	xor_vector = CreateXorVector(0, input_bytes.size());
+	xor_vector = CreateSingleCharacterXorVector(0, input_bytes.size());
 	xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
 	xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
 	output_strings.push_back(CreateTestString(xor_output_string, xor_character));
 	
 	for (xor_character = 1; xor_character != 0; xor_character++) {
 		//test all potential i's
-		xor_vector = CreateXorVector(xor_character, input_bytes.size());
+		xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
 		xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
 		xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
 		output_strings.push_back(CreateTestString(xor_output_string, xor_character));
