@@ -9,7 +9,7 @@
 struct TestString {
 	std::string s;
 	uint8_t key;
-	uint32_t score;
+	int32_t score;
 };
 
 TestString CreateTestString(std::string input_string, uint8_t input_key);
