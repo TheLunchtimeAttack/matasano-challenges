@@ -22,7 +22,7 @@ def format_text(text):
     """
     assert type(text) == str
     if len(text) == 0:
-        return ""
+        return []
     text = text.lower()  # make homogenous letter case
     text = "".join(c for c in text if (c.isalpha() or c in [" ", "\n", "\t"])) # remove numbers and punctuation
     text = re.split(r"[ \t\n]", text)  # Split into a list words, including the null word ""
@@ -64,7 +64,7 @@ def score_english(text):
     
     param text :: text to test
     
-    return :: score of 0 or more. Perfect English should have a score of near 8!
+    return :: score of 0 or more. Perfect English should have a score of near 1!
     """
     if not all([c for c in text if c not in string.printable]):  # Tests that all elements of the text are valid printables
         return 0
@@ -89,5 +89,5 @@ def score_english(text):
     num_i = word_freq("i", text)
     variable_scores = [num_u/numletters - 0.024, num_b/numletters - 0.013, num_in/numpairs - 0.026, num_th/numpairs - 0.038,\
                        num_of/numwords - 0.037, num_my/numwords - 0.00078, num_not/numwords - 0.0016, num_i/numwords - 0.00078]
-    score = sum([1/(abs(var_score) + 1) for var_score in variable_scores])
+    score = sum([1/(abs(var_score) + 1) for var_score in variable_scores])/len(variable_scores)
     return score
