@@ -11,7 +11,9 @@ TestString CreateTestString(std::string input_string, uint8_t input_key) {
 uint8_t TestForNonPrintable(std::string input) {
 	for (uint16_t x = 0; x < input.size(); x++) {
 		if (input[x] > 126 || input[x] < 32) {
-			return 0;
+			if (input[x] != 9 || input[x] != 10 || input[x] != 11 || input[x] != 13) {
+				return 0;
+			}
 		}
 	}
 	
