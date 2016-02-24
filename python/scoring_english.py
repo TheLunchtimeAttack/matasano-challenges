@@ -75,6 +75,7 @@ def score_english(text):
         numletters += len(word)
     num_u = letter_freq("u", text)
     num_b = letter_freq("b", text)
+    num_e = letter_frew("e", text)
 
     numpairs = 0
     for word in text:
@@ -87,7 +88,7 @@ def score_english(text):
     num_my = word_freq("my", text)
     num_not = word_freq("not", text)
     num_i = word_freq("i", text)
-    variable_scores = [num_u/numletters - 0.024, num_b/numletters - 0.013, num_in/numpairs - 0.026, num_th/numpairs - 0.038,\
+    variable_scores = [num_e/num_letters - 0.127, num_u/numletters - 0.024, num_b/numletters - 0.013, num_in/numpairs - 0.026, num_th/numpairs - 0.038,\
                        num_of/numwords - 0.037, num_my/numwords - 0.00078, num_not/numwords - 0.0016, num_i/numwords - 0.00078]
     score = sum([1/(abs(var_score) + 1) for var_score in variable_scores])/len(variable_scores)
     return score
