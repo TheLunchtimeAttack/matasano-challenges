@@ -60,6 +60,5 @@ int main() {
 	}
 	
 	std::cout << "Remaining Keys: " << potential_strings.size() << std::endl;
-	getchar();
 	return 0;
 }
