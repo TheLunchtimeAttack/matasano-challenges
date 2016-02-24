@@ -150,3 +150,30 @@ def bytes_to_hex_string(eightbitnumbers):
         outputstring += to_hex(eightbitnumbers[x] & 0xF) #select 4 lsb from eightbitnumbers[x]
     
     return outputstring
+
+def bytes_to_char(byteinput):
+    """
+    Converts a list of bytes into a list of ASCII characters
+
+    param byteinput: a list of bytes
+    return a string of ASCII characters
+    """
+    chars=''
+    for x in byteinput:
+        chars+=chr(x)
+    return chars
+
+def valid_character(byteinput):
+    """
+    Checks an list of bytes for valid English characters
+
+    param byteinput: a list of bytes
+    return: false if the bytes contain an invalid ASCII character, true otherwise
+    """
+    for x in byteinput:
+        if x<=31 or x>=127:
+            if x!=9 and x!=10 and x!=11: # 9 is hotizontal tab, 10 is newline, 11 is vertical tab
+                return False
+    else:
+        return True
+
