@@ -19,12 +19,12 @@
 
 std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) {
 	std::string xor_output_string;
-	uint8_t xor_character;
+	uint8_t xor_character = 0;
 	std::vector<uint8_t> xor_vector;
 	std::vector<uint8_t> xor_output_bytes;
 	std::vector<TestString> output_strings;
 	
-	xor_vector = CreateSingleCharacterXorVector(0, input_bytes.size());
+	xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
 	xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
 	xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
 	output_strings.push_back(CreateTestString(xor_output_string, xor_character));
@@ -60,6 +60,6 @@ int main() {
 	}
 	
 	std::cout << "Remaining Keys: " << potential_strings.size() << std::endl;
-	
+	getchar();
 	return 0;
 }
