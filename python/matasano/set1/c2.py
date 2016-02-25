@@ -1,8 +1,6 @@
 from matasano.util.converters import *
 from matasano.util.byte_xor import *
 
-hexinput1 = "1c0111001f010100061a024b53535009181c"
-hexinput2 = "686974207468652062756c6c277320657965"
 
 def hex_string_xor(hex1string, hex2string):
     """
@@ -23,5 +21,8 @@ def hex_string_xor(hex1string, hex2string):
     
     return outputstring
     
-xor = hex_string_xor(hexinput1, hexinput2)
-print(xor)
+if __name__ == "__main__":
+    hexinput1 = "1c0111001f010100061a024b53535009181c"
+    hexinput2 = "686974207468652062756c6c277320657965"
+    xor = hex_string_xor(hexinput1, hexinput2)
+    print(xor)

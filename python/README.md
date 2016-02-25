@@ -19,7 +19,12 @@ $ pwd
 $ python
 >>> import matasano.set1.c1
 SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t 
+```
 
+Alternatively, in one command:
+```bash
+$ python -m matasano.set1.c1
+SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t 
 ```
 
 ## Running tests
