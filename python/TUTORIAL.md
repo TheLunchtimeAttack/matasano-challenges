@@ -9,8 +9,9 @@ can be used as a reference for the various aspects.
 
 - [The scenario](#the-scenario)
 - [The setup](#the-setup)
-    - [Cloning & Forking](#cloning--forking)
-    - [Making changes & committing](#making-changes--committing)
+  - [Cloning & Forking](#cloning--forking)
+  - [Making changes & committing](#making-changes--committing)
+  - [Pushing & pulling](#pushing--pulling)
 
 <!-- /MarkdownTOC -->
 
@@ -26,7 +27,7 @@ monstrosity. You think it's time to teach them a lesson...
 First things first, time to get everything organised. You decide to use the
 [Matasano challenge](http://cryptopals.com/) solutions being worked on by [The
 Lunctime Attack](https://github.com/TheLunchtimeAttack/matasano-challenges).
-This should provide some of the cryptography you need to have some fun.
+This should provide the cryptography you need to have some fun.
 
 ### Cloning & Forking
 
@@ -127,3 +128,35 @@ Changes to be committed:
 
 Ok, so we'll commit those change with `git commit` and write a nice commit
 message.
+
+### Pushing & pulling
+
+If we don't have a tool to display Markdown, we can always push it to the repo
+and see how it would look like.
+```bash
+$ git push tutorial
+```
+
+Since we set the branch tutorial to automatically push to the repository `me`,
+this worked fine. However, if we want, we can be more specific and write `git
+push me tutorial`.
+
+As an aside, here is a lovely diagram giving an overview of the different git
+commands:
+![Git data transport from osteele.com](tutorial/img/git-transport.png)
+
+Now that we've pushed our recent changes to our own fork of the repo. Suppose
+we now want to check whether there have been any changes to the main repo
+with new functionality we want to use:
+```bash
+$ git pull origin master
+From https://github.com/TheLunchtimeAttack/matasano-challenges
+ * branch            master     -> FETCH_HEAD
+Already up-to-date.
+```
+Everything up-to-date for now, that's fine. If not we could decide whether it
+would be worth merging the changes (a quick `git log master` to see what
+recent commits have done) and then `git merge master` to bring the new changes
+from `master` into our `tutorial` branch.
+
+
