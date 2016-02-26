@@ -11,8 +11,8 @@ if __name__ == "__main__":
     # Convert string to list of bytes
     byte_list_input = [ord(c) for c in input_str]
 
-    # XOR the string with the byte 1 (flips last bit)
-    output_list = byte_list_xor(byte_list_input, [1]*len(input_str))
+    # XOR the string with the byte 3 (flips last two bits)
+    output_list = byte_list_xor(byte_list_input, [3]*len(input_str))
 
     # Convert list back to string
     output_str = "".join(chr(b) for b in output_list)
