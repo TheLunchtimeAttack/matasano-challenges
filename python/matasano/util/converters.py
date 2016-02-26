@@ -58,27 +58,33 @@ def to_base64(inputnum): # returns the base64 byte characters
     else:
         raise ValueError('Invalid base64 input')
 
-def bytes_to_base64(eightbitnumbers):
+def bytes_to_base64(bytestr):
     """
-    Convert a list of eight bit numbers into the corresponding base64 encoded string
+    Convert a string of bytes into the corresponding base64 encoded string
     
     :param eight_bit_numbers: a list of 8 bit integer values
     :return: a string of ASCII characters
     """
-    assert type(eightbitnumbers) == list
-    for x in eightbitnumbers:
-        assert type(x) == int
-    length=len(eightbitnumbers)
-    while len(eightbitnumbers)%3!=0: # pads input to multiple of 3
-        eightbitnumbers.append(0)
-    temp=base64_splitter(eightbitnumbers)
+    assert type(bytestr) == str
+
+    length = len(bytestr)
+    # Pad the length to the next multiple of 3.
+    while len(bytestr) % 3 != 0:
+        bytestr += '\x00'
+
+    # Convert byte string to string of 8-bit integers.
+    intstr = [ord(b) for b in bytestr]
+
+    tmp = base64_splitter(intstr)
+
     outputstring = ""
-    for i in range(0,len(temp)):
-        outputstring+=to_base64(temp[i])
-    if length%3==1:
+    for i in range(0,len(tmp)):
+        outputstring += to_base64(tmp[i])
+    if length % 3 == 1:
         outputstring = outputstring[:len(outputstring) - 2] + '=='
-    elif length%3==2:
+    elif length % 3 == 2:
         outputstring = outputstring[:len(outputstring) - 1] + '='
+
     return outputstring
 
 def valid_character(byteinput):
@@ -89,8 +95,9 @@ def valid_character(byteinput):
     return: false if the bytes contain an invalid ASCII character, true otherwise
     """
     for x in byteinput:
-        if x<=31 or x>=127:
-            if x!=9 and x!=10 and x!=11: # 9 is hotizontal tab, 10 is newline, 11 is vertical tab
+        c = ord(x)
+        if c<=31 or c>=127:
+            if c!=9 and c!=10 and c!=11: # 9 is hotizontal tab, 10 is newline, 11 is vertical tab
                 return False
     else:
         return True
