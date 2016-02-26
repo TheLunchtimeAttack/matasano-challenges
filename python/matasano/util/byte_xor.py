@@ -1,22 +1,21 @@
 def byte_list_xor(input1, input2):
     """
-    A function that takes two input byte lists and returns the bitwise xor of the two lists
+    A function that takes two input byte lists and returns the bitwise xor
+    of the two lists
     
     :param input1: a list of 8 bit integers
     :param input2: a list of 8 bit integers
     :return: a list of 8 bit integers
     """
-    outputlist = []
-    assert type(input1) == list
-    assert type(input2) == list
-    for x in input1:
-        assert type(x) == int
+    out = ''
+    assert type(input1) == str
+    assert type(input2) == str
     
     if (len(input1) != len(input2)):
-        raise ValueError('byte_list_xor: input lists of unequal length')
+        raise ValueError('byte_list_xor: input strings of unequal length')
     
-    for x in range(len(input1)):
-        outputlist.append(input1[x] ^ input2[x])
+    for c1, c2 in zip(input1, input2):
+        xor = ord(c1) ^ ord(c2)
+        out += chr(xor)
     
-    return outputlist
-
+    return out
