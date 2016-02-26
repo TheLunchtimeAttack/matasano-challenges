@@ -11,7 +11,7 @@ def bytestr_to_hex(byte_string):
     Returns the hexadecimal representation (string)
     of a binary string.
     """
-    return binascii.unhexlify(byte_string)
+    return binascii.hexlify(byte_string)
 
 def base64_splitter(eightbitnumbers): 
     """
