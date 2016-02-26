@@ -20,6 +20,9 @@ earlier on and trying to use git to its fullest.
 - [Working on code](#working-on-code)
   - [Packages in python](#packages-in-python)
   - [Organising your work](#organising-your-work)
+- [Submitting your Changes](#submitting-your-changes)
+  - [Pull requests](#pull-requests)
+  - [Updating the pull request (solving merge conflicts)](#updating-the-pull-request-solving-merge-conflicts)
 
 <!-- /MarkdownTOC -->
 
@@ -29,6 +32,9 @@ earlier on and trying to use git to its fullest.
 You have some annoying colleague who insists that learning git is unnecessary
 and has spent the past year working on a thesis which is just a single .tex 
 monstrosity. You think it's time to teach them a lesson...
+
+The plan is to write a program which takes in a .tex file and encrypts it
+using a very simple cipher.
 
 ## The Setup
 
@@ -281,3 +287,188 @@ Note that it tells you about modifications to *tracked* files, but doesn't
 care about untracked files (they are ignored for now).
 
 Add and commit the new files we added and we're good to continue.
+
+## Submitting your Changes
+
+Once you've finished writing your code, you may want them to be merged into
+the main repository.
+
+### Pull requests
+
+The way to achieve this is with a pull request. Pull requests are GitHub's way
+of doing push/pull when you do not have permission to directly push to a
+repository.
+
+(Think of a pull request as requesting that the owner of the respository pulls
+your changes into their branch.)
+
+To achieve this, you can either navigate to the [New Pull Request](https://github.com/TheLunchtimeAttack/matasano-challenges/pull/new/master)
+page, or usually you can click a button when looking at the branch you
+want to merge.
+
+You can select the *base fork* which is the destination fork (where the
+changes are pulled into), and the *head fork* (the changes to include/pull
+from). GitHub will give you a nice overview of the changes made, the commits
+this includes etc. You should scan over those changes quickly to check 
+everything is included.
+
+Also, hopefully GitHub will tell you 
+
+>  :heavy_check_mark: Able to merge. These branches can be automatically merged. 
+
+Which means that the owner of the base fork can merge the pull request without
+any changes. If not, then you will have to manually merge yourself before
+proceeding.
+
+Suppose we are still in the `tutorial` branch locally, and wish to submit a 
+pull request for this branch in to `master` of TheLunctimeAttack's repo.
+
+First thing to do, is create a *new* branch dedicated to the pull request
+```bash
+$ git checkout -b pr_tutorial
+```
+The reason for doing this is that a pull request automatically includes any
+new commits added to that branch. This is a very useful feature since you can
+incorporate any new feedback without needing to submit a new pull request.
+However, it is best to keep this as a separate branch so you don't add any new
+changes to the pull request accidentally.
+
+As before, we need to push this branch to our fork:
+```bash
+$ git push -u me pr_tutorial
+```
+
+And we can now go and create the pull request as above by visiting 
+[New Pull Request](https://github.com/TheLunchtimeAttack/matasano-challenges/pull/new/master).
+
+In creating the pull request, the title of the pull request will appear in 
+the commit message of the merge when the pull request is merged.
+Therefore, the title should describe what your pull request does.
+
+The box for the description is to give any extra information you think might
+be useful for people reviewing the pull request.
+
+### Updating the pull request (solving merge conflicts)
+
+Later on, you notice that changes made to the code have resulted in merge
+conflicts with your pull request. Luckily, we can make these changes on
+the fly without needing to make a new branch.
+
+First, merge the changes locally:
+```bash
+$ git checkout pr_tutorial
+$ git pull origin master # update the master branch from the TLA repo
+$ git merge master
+Auto-merging python/tutorial/example.py
+CONFLICT (content): Merge conflict in python/tutorial/example.py
+Recorded preimage for 'python/tutorial/example.py'
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+At this point you will get merge conflicts and need to manually rectify them.
+
+Running `git status` helps to show where the merge conflicts were:
+```bash
+$ git status
+On branch pr_tutorial
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+  both modified:   tutorial/example.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+The 'both modified' is telling you that to merge you need to decide
+which code you want to keep, the code introduced by `master` or the 
+code in `pr_tutorial`
+
+**Note**: if you make a mess of the merge and want to abandon it, you
+can run `git merge --abort` to take you back to the pre-merged state.
+
+We can run `git diff` to see where the merge conflicts are:
+
+```bash
+$ git diff tutorial/example.py 
+diff --cc python/tutorial/example.py
+index 22abb6b,fc8bc2d..0000000
+--- a/python/tutorial/example.py
++++ b/python/tutorial/example.py
+@@@ -11,8 -11,8 +11,13 @@@ if __name__ == "__main__"
+      # Convert string to list of bytes
+      byte_list_input = [ord(c) for c in input_str]
+  
+++<<<<<<< HEAD
+ +    # XOR the string with the byte 2 (flips secondd last bit)
+ +    output_list = byte_list_xor(byte_list_input, [2]*len(input_str))
+++=======
++     # XOR the string with the byte 3 (flips last two bits)
++     output_list = byte_list_xor(byte_list_input, [3]*len(input_str))
+++>>>>>>> master
+  
+      # Convert list back to string
+      output_str = "".join(chr(b) for b in output_list)
+```
+
+The code is separated into `<<<< ... ==== .... >>>>` blocks.
+The first block is showing the changes introduced in `HEAD`
+(these refer to the branch you are currently on) whereas the
+second block shows the changes introduced in `master`.
+
+Note that all git has done is annotate the file to show what you
+need to resolve *manually*. The `<<<<...` parts have to be removed.
+
+You edit the file and decide that you'd rather keep the changes from
+`master`. To finish the merge:
+```bash
+$ git add tutorial/example.py
+$ git status
+On branch pr_tutorial
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+  modified:   tutorial/example.py
+$ git commit
+Recorded resolution for 'python/tutorial/example.py'.
+[pr_tutorial 88aa6d4] Merge branch 'master' into pr_tutorial
+``` 
+Git will automatically create a merge message for you (feel free to add some
+details if you made significant changes in the merge).
+
+You can see what happened with the merge using `git log --graph`:
+```bash
+$ git log --graph
+*   commit 88aa6d4342b8707a11ffc1614fe4fa4d072884bf
+|\  Merge: 07096ba 1355ea6
+| | Author: Sam Scott <sam.scott89@gmail.com>
+| | Date:   Fri Feb 26 12:17:30 2016 +0000
+| | 
+| |     Merge branch 'master' into pr_tutorial
+| |   
+| * commit 1355ea6276a50e9540201bdb2184a44751101224
+| | Author: Sam Scott <sam.scott89@gmail.com>
+| | Date:   Fri Feb 26 12:07:38 2016 +0000
+| | 
+| |     Change example XOR to flip 2 bits.
+| |     
+| |     (Making changes to illustrate merge conflicts)
+| |   
+* | commit 07096ba58e61580168c85dbcbecb107824096871
+|/  Author: Sam Scott <sam.scott89@gmail.com>
+|   Date:   Fri Feb 26 12:08:31 2016 +0000
+|   
+|       Change XOR to flip second last bit
+|       
+|       Making change to cause merge conflict as an example.
+|  
+
+```
+
+Once again, push these changes to the remote branch with `git push` and you
+should see your recent merge commit added to the pull request automatically,
+which is now ready to merge.
