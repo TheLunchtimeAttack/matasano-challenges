@@ -23,6 +23,9 @@ earlier on and trying to use git to its fullest.
 - [Submitting your Changes](#submitting-your-changes)
   - [Pull requests](#pull-requests)
   - [Updating the pull request (solving merge conflicts)](#updating-the-pull-request-solving-merge-conflicts)
+- [Misc/Extras](#miscextras)
+  - [`.gitconfig` file](#gitconfig-file)
+  - [Bash prompt](#bash-prompt)
 
 <!-- /MarkdownTOC -->
 
@@ -472,3 +475,80 @@ $ git log --graph
 Once again, push these changes to the remote branch with `git push` and you
 should see your recent merge commit added to the pull request automatically,
 which is now ready to merge.
+
+## Misc/Extras
+
+A few bonus goodies.
+
+### `.gitconfig` file
+
+There are two important places git looks for config files: a global `~/.gitconfig`
+and the project specific `project/.git/config`. The former is very useful for
+setting up some useful configuration.
+
+Searching for useful `.gitconfig` files will provide many results, but a couple of 
+important ones are included here:
+
+```yaml
+[user]
+        name = Your Name
+        email = yourname@example.com
+[core]
+        editor = nano 
+        whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+        excludesfile = ~/.gitignore
+[github]
+        user = gitusername
+        token = ~/.ssh/id_ecdsa
+[bitbucket]
+        user = bbusername
+        token = ~/.ssh/id_ecdsa
+[push]
+        default = tracking
+[color]
+        ui = auto
+[color "branch"]
+        current = yellow bold
+        local = green bold
+        remote = cyan bold
+[color "diff"]
+        meta = yellow bold
+        frag = magenta bold
+        old = red bold
+        new = green bold
+        whitespace = red reverse
+[color "status"]
+        added = green bold
+        changed = yellow bold
+        untracked = red bold
+```
+
+The `default = tracking` option means that doing a `git push` will only push
+the current branch if it has a remote branch it is tracking.
+
+For many other config options, do `man git config`.
+
+### Bash prompt
+
+One *incredibly* useful thing to have, is the name of the current git branch
+shown in your bash prompt (the command line).
+
+You can achieve this by editting the '~/.bashrc' file.
+
+Again, searching for 'best bash prompts' will probably return some great examples, 
+and some tools to customise, but for reference, here's mine:
+```bash
+function git-branch-name {
+  git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3
+}
+function git-branch-prompt {
+  local branch=`git-branch-name`
+  if [ $branch ]; then printf " [%s]" $branch; fi
+}
+
+PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]$(pwd -P)\[\e[m\] $(git-branch-prompt) \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'
+
+```
+The best part is the `git-branch-prompt` function which puts the name of the
+current branch into the prompt. This makes it much easier to work with
+different branches since you don't need to remember where you are!
