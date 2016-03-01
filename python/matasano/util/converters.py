@@ -87,18 +87,20 @@ def bytes_to_base64(bytestr):
 
     return outputstring
 
-def valid_character(byteinput):
+def valid_characters(bytestr):
     """
-    Checks an list of bytes for valid English characters
+    Returns True if the byte string provided contains only
+    characters of the alphabet or newline, tab, vertical
+    bar.
+    Returns False otherwise.
 
     param byteinput: a list of bytes
     return: false if the bytes contain an invalid ASCII character, true otherwise
     """
-    for x in byteinput:
-        c = ord(x)
-        if c<=31 or c>=127:
-            if c!=9 and c!=10 and c!=11: # 9 is hotizontal tab, 10 is newline, 11 is vertical tab
-                return False
-    else:
+    for b in bytestr.upper():
+        if not b in range(ord('A'), ord('Z')):
+            return False
+        if not b in [ord('\t'), ord('\n'), ord('|')]:
+            return False
+    else: 
         return True
-
