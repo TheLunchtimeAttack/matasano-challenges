@@ -1,7 +1,7 @@
-def byte_list_xor(input1, input2):
+def xor(input1, input2):
     """
-    A function that takes two input byte lists and returns the bitwise xor
-    of the two lists
+    Takes two byte strings and returns the bitwise xor
+    of them.
     
     :param input1: a list of 8 bit integers
     :param input2: a list of 8 bit integers
