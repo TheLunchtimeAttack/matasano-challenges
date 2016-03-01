@@ -1,5 +1,5 @@
 from matasano.util.converters import *
-from matasano.util.byte_xor import *
+from matasano.util.byte_xor import xor
 
 hexinput1 = "1c0111001f010100061a024b53535009181c"
 hexinput2 = "686974207468652062756c6c277320657965"
@@ -15,11 +15,12 @@ def hex_string_xor(hex1string, hex2string):
     assert type(hex1string) == str
     assert type(hex2string) == str
     
-    hex1bytes = read_hex(hex1string)
-    hex2bytes = read_hex(hex2string)
+    hex1bytes = hex_to_bytestr(hex1string)
+    hex2bytes = hex_to_bytestr(hex2string)
     
-    outputbytes = byte_list_xor(hex1bytes, hex2bytes)
-    outputstring = bytes_to_hex_string(outputbytes)
+    outputbytes = xor(hex1bytes, hex2bytes)
+    print outputbytes
+    outputstring = bytestr_to_hex(outputbytes)
     
     return outputstring
     
