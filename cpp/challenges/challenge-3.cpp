@@ -4,6 +4,7 @@
 #include "../util/MatasanoConverter.h"
 #include "../util/MatasanoUtil.h"
 #include "../util/StringTesting.h"
+#include "../util/TestString.h"
 
 #define PUNCTUATION_THRESHOLD 5
 
@@ -27,14 +28,14 @@ std::vector<TestString> TestStringVectorSetup(std::vector<uint8_t> input_bytes) 
 	xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
 	xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
 	xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
-	output_strings.push_back(CreateTestString(xor_output_string, xor_character));
+	output_strings.push_back(TestString(xor_output_string, xor_character));
 	
 	for (xor_character = 1; xor_character != 0; xor_character++) {
 		//test all potential i's
 		xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
 		xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
 		xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
-		output_strings.push_back(CreateTestString(xor_output_string, xor_character));
+		output_strings.push_back(TestString(xor_output_string, xor_character));
 	}
 	
 	return output_strings;
@@ -56,7 +57,7 @@ int main() {
 	std::cout << "Remaining Keys (excessive punctuation filter): " << potential_strings.size() << std::endl;
 	
 	for (uint16_t i = 0; i < potential_strings.size(); i++) {
-		std::cout << "Key used: " << (unsigned) potential_strings[i].key << std::endl << potential_strings[i].s << std::endl;
+		std::cout << "Key used: " << (unsigned) potential_strings[i].GetKey() << std::endl << potential_strings[i].GetCipherText() << std::endl;
 	}
 	
 	std::cout << "Remaining Keys: " << potential_strings.size() << std::endl;
