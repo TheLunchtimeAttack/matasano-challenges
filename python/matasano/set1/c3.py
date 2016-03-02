@@ -4,7 +4,7 @@ from matasano.util.byte_xor import xor
 input1='1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736'
 
 Bytes = converters.hex_to_bytestr(input1)
-print 'Bytes:', `Bytes`
+print('Bytes:', Bytes)
 
 potential_keys=[]
 
@@ -25,20 +25,21 @@ if len(repeated(Bytes))>0:
     # Unique potential keys.
     potential_keys = list(set(potential_keys))
 
-    print 'Repeated letters found.  Only relevant keys added.'
-    print 'Current potential keys:', potential_keys
-    print 'Current number of potential keys:', len(potential_keys)
+    print('Repeated letters found.  Only relevant keys added.')
+    print('Current potential keys:', potential_keys)
+    print('Current number of potential keys:', len(potential_keys))
     # removes potential keys which are not printable characters
     for k in potential_keys:
         if not converters.valid_characters(k):
             potential_keys.remove(k)
-    print 'Current number of potential keys:', len(potential_keys)
+    print('Current number of potential keys:', len(potential_keys))
+    print('Current potential keys:', potential_keys)
 else:
     for k in range (32,127):
         potential_keys.append(chr(k))
-    print 'No repeated letters found.  All relevant keys added.'
-    print 'Current potential keys:', potential_keys
-    print 'Current number of potential keys:', len(potential_keys)
+    print('No repeated letters found.  All relevant keys added.')
+    print('Current potential keys:', potential_keys)
+    print('Current number of potential keys:', len(potential_keys))
 
 def decrypt(k,c):
     """
@@ -57,12 +58,12 @@ def decrypt(k,c):
 # this checks the potential keys and removes any which result in invalid decryptions
 for k in potential_keys:
     decrypted = decrypt(k, Bytes)
-    print decrypted
+    print(decrypted)
     if not converters.valid_characters(decrypted):
         potential_keys.remove(k)
-print '\n Keys which return invalid decryptions filtered out.'
-print 'Current potential keys:', potential_keys
-print 'Current number of potential keys:', len(potential_keys)
+print('\n Keys which return invalid decryptions filtered out.')
+print('Current potential keys:', potential_keys)
+print('Current number of potential keys:', len(potential_keys))
 
 candidate_plaintext={}
 for k in potential_keys:
@@ -97,5 +98,5 @@ for k in potential_keys:
     Score[k]=score_string(candidate_plaintext[k])
 
 key=max(Score, key=Score.get)
-print candidate_plaintext[key]
-print 'key: ', key
+print(candidate_plaintext[key])
+print('key: ', key)

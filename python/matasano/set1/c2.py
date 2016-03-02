@@ -19,7 +19,7 @@ def hex_string_xor(hex1string, hex2string):
     hex2bytes = hex_to_bytestr(hex2string)
     
     outputbytes = xor(hex1bytes, hex2bytes)
-    print outputbytes
+    print(outputbytes)
     outputstring = bytestr_to_hex(outputbytes)
     
     return outputstring
