@@ -1,211 +1,88 @@
 #include <iostream>
 #include <string>
+#include <stdint.h>
 #include <vector>
 #include <algorithm>
 #include <fstream>
 #include <iterator>
 #include <algorithm>
-using std::copy;
+#include "../util/MatasanoConverter.h"
+#include "../util/MatasanoUtil.h"
+#include "../util/StringTesting.h"
+#include "../util/FileRead.h"
+#include "../util/TestString.h"
 
-using namespace std;
+#define PUNCTUATION_THRESHOLD 5
 
-int combine_hex(int first, int second){
-	//
-	// This function takes two agruments, both integers. The first is shifted by 4 and then
-	// the two bytes are logical OR'ed together. We then return output: the byte value 
-	// max 256. This thus takes 2 hex characters and makes them a byte.
-	//
-	first = first << 4;
-	second = second & 0x0f;
-
-	int output = first | second;
-	return output;
+std::vector<TestString> TestStringVectorSetup(std::string input_string) {
+	std::vector<uint8_t> input_bytes = ByteVectorFromString(input_string, "hex");
+	std::string xor_output_string;
+	uint8_t xor_character = 0;
+	std::vector<uint8_t> xor_vector;
+	std::vector<uint8_t> xor_output_bytes;
+	std::vector<TestString> output_strings;
+	
+	xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
+	xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
+	xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
+	output_strings.push_back(TestString(input_string, xor_output_string, xor_character));
+	
+	for (xor_character = 1; xor_character != 0; xor_character++) {
+		//test all potential i's
+		xor_vector = CreateSingleCharacterXorVector(xor_character, input_bytes.size());
+		xor_output_bytes = XorByteVectors(input_bytes, xor_vector);
+		xor_output_string = StringFromByteVector(xor_output_bytes, "ASCII");
+		output_strings.push_back(TestString(input_string, xor_output_string, xor_character));
+	}
+	
+	return output_strings;
 }
 
-int hextobyte(char charIn){
-	//
-	// This function takes argument charIn a hex value of datatype char. It then uses
-	// an ASCII look up with calculated offset to return the corresponding decimal value
-	// (byte) as an integer.
-	//
-
-	int intIn = (int)charIn;
-
-	if (48 <= intIn & intIn <= 57){       // reads numbers hex
-		intIn = intIn - 48;
+std::vector<TestString> InitialKeyAndStringPurge(std::vector<std::string> input_strings) {
+	std::vector<TestString> current_key;
+	std::vector<TestString> output_vector;
+	
+	for (int i = 0; i < input_strings.size(); i++) {
+		current_key = TestStringVectorSetup(input_strings[i]);
+		current_key = FilterNonPrintable(current_key);
+		current_key = FilterExcessivePunctuation(current_key, PUNCTUATION_THRESHOLD);
+		output_vector.reserve(output_vector.size() + current_key.size());
+		output_vector.insert(output_vector.end(), current_key.begin(), current_key.end());
 	}
-	else if (65 <= intIn & intIn <= 70){  // reads upper case hex
-		intIn = intIn - 55;
-	}
-	else if (97 <= intIn & intIn <= 102){ // reads lower case hex
-		intIn = intIn - 87;
-	}
-	else {
-		cout << "no good" << endl;
-		return 0;
-	}
-	return intIn;
+	
+	std::cout << "remaining options = " << output_vector.size() << std::endl;
+	
+	return output_vector;
 }
 
-vector <int> read_hex(string input, int len){  //was int*
-	//
-	// takes a string and its corresponding length and reads two at entries of the
-	// string at a time and stores the decimal values in an array.
-	vector <int> arr(len / 2);
-	int count = 0;
-
-	for (int i = 0; i <= len - 1; i += 2){
-		arr[count] = combine_hex(hextobyte(input[i]), hextobyte(input[i + 1]));
-		count = count + 1;
-	}
-
-	return arr;
-}
-
-vector <int> xor(vector <int> a, vector <int> b){
-	//
-	// XOR's a and b. for a,b two svectors of equal length. Returns vector of integers
-	//
-	int len = a.size();
-	int len2 = b.size();
-
-	vector <int> xordec;
-
-	if (len != len2){ // check equal length
-		cout << "Strings must be of equal length";
-		throw invalid_argument("Strings must be of equal length");
-	}
-
-	for (int i = 0; i < len; i++){ //bitwise XOR
-		int xor = (a[i] ^ b[i]);
-		xordec.push_back(xor);
-	}
-	return xordec;
-}
-
-
-vector <char> keytest(vector <int> bytes, int key){
-	// This function takes arguement bytes, a vector of hex decoded base64 bytes and a key.
-	// We know that this byte string has been XOR'd by a string of the key repeated suffiently.
-	// This function uses the xor function to XOR the bytes with a vector of the repeteated key.
-	// This effectively decrypts the cipher text we were given. A sanity check is performed, in
-	// which the ascii characters the resulting XOR'd string contains are checked to see if they
-	// are printable. If the string contains unprintable characters, the key is dropped. If there
-	// are no such unprintable characters the vector of ascii characters is returned.
-
-	vector <int> keyvector(bytes.size());
-	vector <char> plaintext;
-
-	fill(keyvector.begin(), keyvector.end(), key); // fills a vector of keys
-	vector <int> plainbytes = xor(bytes, keyvector); // XORs the bytes with the keyvector
-
-	for (int i = 0; i < plainbytes.size(); i++){ // look at each element in the vector and check the byte is printable
-		if ((plainbytes[i] > 126 | plainbytes[i] < 32) & (plainbytes[i] != 9) & (plainbytes[i] != 10)&(plainbytes[i] != 11)&(plainbytes[i] != 13)){ //in the range of readable ascii characters // add 9 , 10 , 11, 13 ascii characters
-			//cout << endl << "invalid char";
-			vector <char> empty;
-			return  empty; // unprintable char, so return empty vector
-		}
-		else {
-			plaintext.push_back((char)plainbytes[i]); //vector of ascii chars
-		}
-	}
-	return plaintext;
-}
-
-string freqanal(vector <string> poss){
+int FindHighestScore(std::vector<TestString> input_strings){
 	// The function freqanal performs frequeny analysis on the inputted vector of strings poss.
 	// It does this by comparing entries of a vector of the most common characters in English text
 	// with each element of the vector poss. Each element is given a value of the frequency of these
 	// letters, and the element with the highest score is then returned as a string.
+	int max_index = 0, max_index_location = 0;
 
-	vector <char> freq = { ' ', 'e', 't', 'a', 'o', 'i', 'n', 's' }; // most common characters, ordered by most frequent first
-	vector <int> freqnum; //stores total number of occourenes of those letters, for each string
-
-	for (int i = 0; i < poss.size(); i++){ //searches through each string
-		int n = 0; // counts freqyency of j'th entry in freq
-		for (int j = 0; j < freq.size(); j++){
-			n = n + count(poss[i].begin(), poss[i].end(), freq[j])*(freq.size() - j); // this counts, then give some
-			//wieght assined to each char dependent on its index in the list
-		}
-		freqnum.push_back(n);
-		//cout << "There are " << n << " common letters in the plain text." << endl;
-	}
-
-	int maxindex = distance(freqnum.begin(), max_element(freqnum.begin(), freqnum.end())); // this finds the maximum element
-	// and uses distance to calculate the index of the maximum element
-	string str(poss[maxindex].begin(), poss[maxindex].end()); // the corresponding element of poss, is returned as a string
-	return str;
-}
-
-vector <string> readfile(string str){
-	// This function reads the file name stored as a string in the variable str. It then
-	// creates a vector of strings and stores each string in the file strings.txt as an
-	// element in the vector
-
-	vector<string> DataArray;
-
-	// Create two input streams, opening the named files in the process.
-	// You only need to check for failure if you want to distinguish
-	// between "no file" and "empty file". In this example, the two
-	// situations are equivalent.
-	ifstream myfile(str);
-
-	// std::copy(InputIt first, InputIt last, OutputIt out) copies all
-	//   of the data in the range [first, last) to the output iterator "out"
-	// istream_iterator() is an input iterator that reads items from the
-	//   named file stream
-	// back_inserter() returns an interator that performs "push_back"
-	//   on the named vector.
-	copy(istream_iterator<string>(myfile),
-		istream_iterator<string>(),
-		back_inserter(DataArray));
-
-	return DataArray;
-}
-
-vector <string> keyatt(vector <string> Array){
-	// keyatt takes a vector of hex encoded strings in a variable called Array.It then looks at each element
-	// of this array, and decodes the hex characters into bytes. We know these bytes have been XOR'd with some
-	// ASCII character (the key) so we XOR this byte string with every possible key (128 of them) to retrive the
-	// possible plaintexts. We do this by calling the keytest function on each element of byte strings and the 
-	// key we are using to decrypt. If the dectrypted string has no unprintable characters, it is added to a vector
-	// of possible plaintext strings. This vector is then returned by the function.
-
-
-	vector <string> poss; //possible strings
-	for (int x = 0; x < Array.size(); x++){ //loop through all elements in array
-		vector <int> bytes = read_hex(Array[x], Array[x].length()); //gets bytes
-
-		for (int i = 0; i < 128; i++){ //we run through all 128 possible keys here
-			vector <char> plaintext = keytest(bytes, i); // calls keytest to try key i on the decoded bytes
-			if (plaintext.size() > 0){ // if the size is not empty, the key wasn't rejected, so we add it to the vector
-				string str2(plaintext.begin(), plaintext.end());
-				poss.push_back(str2);
-			}
+	for (int i = 0 ; i < input_strings.size(); i++) {
+		if (input_strings[i].GetScore() > max_index) {
+			max_index = input_strings[i].GetScore();
+			max_index = i;
 		}
 	}
-	return poss;
-
+	
+	return max_index;
 }
 
 int main() {
-	vector <string> DataArray = readfile("strings.txt"); // read in the strings
-	vector <string> poss = keyatt(DataArray); // vector of possible strings
-
-	for (int j = 0; j < poss.size(); j++){ // print all possibilities
-		cout << poss[j] << endl;
-	}
-
-	if (poss.size()>0){ //makes sure file has been read correctly
-		string plaintext = freqanal(poss); // perform freq.anal. to find most likely solution
-		cout << endl << "Frequency analysis results esitmate plaintext to be:" << endl << '"' << plaintext << '"';
-	}
-	else{
-		cout << "Error reading file";
-	}
-
+	std::vector<std::string> DataArray = ReadFileContents("4.txt"); // read in the strings
+	std::cout << "Number of inputs: " << DataArray.size() << std::endl;
+	std::vector<TestString> possible_outputs = InitialKeyAndStringPurge(DataArray); // vector of possible strings
+	std::cout << "Number after initial cull: " << possible_outputs.size() << std::endl;
 	
+	possible_outputs = AnalyseLetterFrequencies(possible_outputs);
+	
+	int ash_ketchum = FindHighestScore(possible_outputs);
+	
+	std::cout << possible_outputs[0].GetCipherText() << std::endl;
 
-	getchar(); //halts console from closing in visual studio
 	return 0;
 }
