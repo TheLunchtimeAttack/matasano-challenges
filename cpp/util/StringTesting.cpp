@@ -58,18 +58,36 @@ std::vector<TestString> AnalyseLetterFrequencies(std::vector<TestString> input_s
 	// with each element of the vector poss. Each element is given a value of the frequency of these
 	// letters, and the element with the highest score is then returned as a string.
 
-	std::vector<char> freq = { ' ', 'e', 't', 'a', 'o', 'i', 'n', 's' }; // most common characters, ordered by most frequent first
+	char freq [] = { ' ', 'e', 't', 'a', 'o', 'i', 'n', 's' }; // most common characters, ordered by most frequent first
 	std::vector<TestString> scored_strings = input_strings;
 
 	for (int i = 0; i < input_strings.size(); i++){ //searches through each string
 		int32_t n = 0; // counts freqyency of j'th entry in freq
-		for (int j = 0; j < freq.size(); j++){
-			n = n + ((int32_t) count(input_strings[i].GetCipherText().begin(), input_strings[i].GetCipherText().end(), freq[j])*(freq.size() - j)); // this counts, then give some
+		for (int j = 0; j < sizeof(freq); j++){
+			n = n + ((int32_t) count(input_strings[i].GetCipherText().begin(), input_strings[i].GetCipherText().end(), freq[j])*(sizeof(freq) - j)); // this counts, then give some
 			//weight assined to each char dependent on its index in the list
 		}
 		scored_strings[i].SetScore(n);
 		//cout << "There are " << n << " common letters in the plain text." << endl;
 	}
 	return scored_strings;
+}
+
+int FindHighestScore(std::vector<TestString> input_strings) {
+	// The function freqanal performs frequeny analysis on the inputted vector of strings poss.
+	// It does this by comparing entries of a vector of the most common characters in English text
+	// with each element of the vector poss. Each element is given a value of the frequency of these
+	// letters, and the element with the highest score is then returned as a string.
+	int32_t max_score = -1;
+	int max_score_location = 0;
+
+	for (int i = 0 ; i < input_strings.size(); i++) {
+		if (input_strings[i].GetScore() > max_score) {
+			max_score = input_strings[i].GetScore();
+			max_score_location = i;
+		}
+	}
+	
+	return max_score_location;
 }
 
