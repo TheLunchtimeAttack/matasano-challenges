@@ -55,23 +55,6 @@ std::vector<TestString> InitialKeyAndStringPurge(std::vector<std::string> input_
 	return output_vector;
 }
 
-int FindHighestScore(std::vector<TestString> input_strings){
-	// The function freqanal performs frequeny analysis on the inputted vector of strings poss.
-	// It does this by comparing entries of a vector of the most common characters in English text
-	// with each element of the vector poss. Each element is given a value of the frequency of these
-	// letters, and the element with the highest score is then returned as a string.
-	int max_index = 0, max_index_location = 0;
-
-	for (int i = 0 ; i < input_strings.size(); i++) {
-		if (input_strings[i].GetScore() > max_index) {
-			max_index = input_strings[i].GetScore();
-			max_index = i;
-		}
-	}
-	
-	return max_index;
-}
-
 int main() {
 	std::vector<std::string> DataArray = ReadFileContents("4.txt"); // read in the strings
 	std::cout << "Number of inputs: " << DataArray.size() << std::endl;
