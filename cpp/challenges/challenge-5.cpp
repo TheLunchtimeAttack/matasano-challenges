@@ -1,9 +1,6 @@
 #include <iostream>
 #include "../util/MatasanoConverter.h"
 #include "../util/MatasanoUtil.h"
-#include "../util/StringTesting.h"
-#include "../util/FileRead.h"
-#include "../util/TestString.h"
 
 int main() {
 	std::string s = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
