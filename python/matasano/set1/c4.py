@@ -6,7 +6,7 @@ from matasano.util.converters import *
 from matasano.set1.c3 import *
 
 # Takes the file and converts it into a list
-text_file = open("strings.txt");
+text_file = open("matasano/set1/strings.txt");
 inputlist = text_file.read().splitlines();
 
 
