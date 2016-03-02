@@ -13,15 +13,15 @@ inputlist = text_file.read().splitlines();
 # Takes a byte string and returns the most likely plaintext and key.
 def decryptsinglexor(input1):
 
-    byte_input = read_hex(input1) #Changes input to bytes
+    byte_input = hex_to_bytestr(input1) #Changes input to bytes
     potential_keys = []
 
     for k in range (0,256):
-        potential_keys.append(k)
+        potential_keys.append(chr(k))
 
     for k in potential_keys:
         decrypted = decrypt(k,byte_input)
-        if not valid_character(decrypted):
+        if not valid_characters(decrypted):
             potential_keys.remove(k)
 
     #print('\n Keys which return invalid decryptions filtered out.')
@@ -31,12 +31,12 @@ def decryptsinglexor(input1):
     candidate_plaintext={}
 
     for k in potential_keys:
-        candidate_plaintext[k]=plaintext(k,byte_input)
+        candidate_plaintext[k]=decrypt(k,byte_input)
 
     Score={}
 
     for k in potential_keys:
-        Score[k]=score(candidate_plaintext[k])
+        Score[k]=score_string(candidate_plaintext[k])
 
     key=max(Score, key=Score.get)
 
@@ -53,7 +53,7 @@ plaintextscores = {}
 # along with the plaintext score.
 for input in inputlist:
     (working_key, working_plaintext) = decryptsinglexor(input)
-    working_score = score(working_plaintext)
+    working_score = score_string(working_plaintext)
     #print("Working key:", working_key)
     #print ("Working plaintext:", working_plaintext)
     #print ("Working score:", working_score)
