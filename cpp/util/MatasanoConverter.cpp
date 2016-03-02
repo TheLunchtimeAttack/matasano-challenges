@@ -150,6 +150,16 @@ std::vector<uint8_t> HexStringConvert(std::string input_string) {
 	return output_vector;
 }
 
+std::vector<uint8_t> ASCIIStringConvert(std::string input_string) {
+	std::vector<uint8_t> output_vector;
+	
+	for (int i = 0; i < input_string.size(); i++) {
+		output_vector.push_back((uint8_t) input_string[i]);
+	}
+	
+	return output_vector;
+}
+
 std::string StringFromVectorASCII(std::vector<uint8_t> input_vector) {
 	std::string out = "";
 	
@@ -182,6 +192,8 @@ std::vector<uint8_t> ByteVectorFromString(std::string input_string, std::string 
 	//e.g. for base64 input
 	if (input_type.compare("hex") == 0 || input_type.compare("Hex") == 0 || input_type.compare("h") == 0) { 
 		return HexStringConvert(input_string);
+	} else if (input_type.compare("ASCII") == 0 || input_type.compare("ascii") == 0 || input_type.compare("Ascii")) {
+		return ASCIIStringConvert(input_string);
 	} else {
 		throw std::invalid_argument("inputString: unknown inputType.");
 	}
