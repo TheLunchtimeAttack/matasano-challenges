@@ -1,4 +1,4 @@
-def hex_to_byte(charin):
+def hex_to_bits(charin):
     """
     Convert an ASCII encoded hex character into it's corresponding 4 bit hex number.
     
@@ -6,47 +6,61 @@ def hex_to_byte(charin):
     :return: a 4 bit integer
     """
     assert type(charin) == str
-    assert len(charin) == 1
-    charin=ord(charin) # converts charIn to its `integer' value (the ascii encoding value)
-    if 48<= charin and charin <=57: # converts 0-9 characters to integers
-        charin=charin-48
-    elif 65<= charin and charin <=70: # converts uppercase to integers
-        charin=charin-55
-    elif 97<= charin and charin<=102: # converts lowercase to integers
-        charin=charin-87
+    char_bits =ord(charin) # converts charIn to its `integer' value (the ascii encoding value)
+    if char_bits in range(ord('0'), ord('9')+1): # converts 0-9 characters to integers
+        return char_bits-ord('0')
+    elif char_bits in range(ord('A'), ord('Z')+1): # converts uppercase to integers
+        return char_bits-ord('A') + 10
+    elif char_bits in range(ord('a'), ord('z')+1): # converts lowercase to integers
+        return char_bits-ord('a') + 10
     else:
         raise ValueError('Invalid hex character')
-    return charin
 
-def combine_hex(msb, lsb):
+def hex_to_bytestr(hex_string):
     """
-    Combines two 4 bit numbers into one 8 bit number
-    e.g. combine_hex(4,8) would return 0x48
-    
-    :param msb: a 4 bit integer
-    :param lsb: a 4 bit integer
-    :return: an 8 bit integer
+    Returns a byte string from its hexadecimal expression.
     """
-    assert type(msb) == int
-    assert type(lsb) == int
-    msb=msb<<4 # puts the significant bits on the left
-    output=msb | lsb # or of first and second
+    assert type(hex_string) == str
+    output=""
+    if len(hex_string)%2!=0:
+        raise ValueError('read_hex: Odd number of hex characters input.')
+    for i in range(0,len(hex_string)-1,2):
+        byte_val = hex_to_bits(hex_string[i]) << 4
+        byte_val += hex_to_bits(hex_string[i+1])
+        output += chr(byte_val)
     return output
 
-def read_hex(hexstring):
+def to_hex(inputnum):
     """
-    Creates a list of 8 bit numbers from a hex string
+    A function that takes a 4 bit number as input and returns a one character string of the hex character representing that number
     
-    :param hexstring: a string of ASCII encoded characters
-    :return: a list of 8 bit numbers
+    :param inputnum: an 8 bit integer
+    :return: a string of length 1
     """
-    assert type(hexstring) == str
-    byteVals=[]
-    if len(hexstring)%2!=0:
-        raise ValueError('read_hex: Odd number of hex characters input.')
-    for i in range(0,len(hexstring)-1,2):
-        byteVals.append(combine_hex(hex_to_byte(hexstring[i]),hex_to_byte(hexstring[i+1])))
-    return byteVals
+    assert type(inputnum) == int
+    
+    if 0 <= inputnum and inputnum <= 9:
+        return chr(inputnum + 48)
+    elif 10 <= inputnum and inputnum <= 15:
+        return chr(inputnum + 87)
+    else:
+        raise ValueError('to_hex: Invalid hex character')
+
+def bytestr_to_hex(byte_str):
+    """
+    Returns the hexadecimal representation (string)
+    of a binary string.
+    """
+    assert type(byte_str) == str
+
+    outputstring = ""
+    
+    for b in byte_str:
+        outputstring += to_hex(ord(b) >> 4) #select 4 msb from eightbitnumbers[x]
+        outputstring += to_hex(ord(b) & 0xF) #select 4 lsb from eightbitnumbers[x]
+    
+    return outputstring
+
 
 def base64_splitter(eightbitnumbers): 
     """
@@ -93,87 +107,46 @@ def to_base64(inputnum): # returns the base64 byte characters
     else:
         raise ValueError('Invalid base64 input')
 
-def bytes_to_base64(eightbitnumbers):
+def bytes_to_base64(bytestr):
     """
-    Convert a list of eight bit numbers into the corresponding base64 encoded string
+    Convert a string of bytes into the corresponding base64 encoded string
     
     :param eight_bit_numbers: a list of 8 bit integer values
     :return: a string of ASCII characters
     """
-    assert type(eightbitnumbers) == list
-    for x in eightbitnumbers:
-        assert type(x) == int
-    length=len(eightbitnumbers)
-    while len(eightbitnumbers)%3!=0: # pads input to multiple of 3
-        eightbitnumbers.append(0)
-    temp=base64_splitter(eightbitnumbers)
+    assert type(bytestr) == str
+
+    length = len(bytestr)
+    # Pad the length to the next multiple of 3.
+    while len(bytestr) % 3 != 0:
+        bytestr += '\x00'
+
+    # Convert byte string to string of 8-bit integers.
+    intstr = [ord(b) for b in bytestr]
+
+    tmp = base64_splitter(intstr)
+
     outputstring = ""
-    for i in range(0,len(temp)):
-        outputstring+=to_base64(temp[i])
-    if length%3==1:
+    for i in range(0,len(tmp)):
+        outputstring += to_base64(tmp[i])
+    if length % 3 == 1:
         outputstring = outputstring[:len(outputstring) - 2] + '=='
-    elif length%3==2:
+    elif length % 3 == 2:
         outputstring = outputstring[:len(outputstring) - 1] + '='
+
     return outputstring
 
-def to_hex(inputnum):
+def valid_characters(bytestr):
     """
-    A function that takes a 4 bit number as input and returns a one character string of the hex character representing that number
-    
-    :param inputnum: an 8 bit integer
-    :return: a string of length 1
-    """
-    assert type(inputnum) == int
-    
-    if 0 <= inputnum and inputnum <= 9:
-        return chr(inputnum + 48)
-    elif 10 <= inputnum and inputnum <= 15:
-        return chr(inputnum + 87)
-    else:
-        raise ValueError('to_hex: Invalid hex character')
+    Returns True if the byte string provided contains only
+    characters of the alphabet or newline, tab, vertical
+    bar.
+    Returns False otherwise.
 
-def bytes_to_hex_string(eightbitnumbers):
-    """
-    Converts a list of 8 bit numbers into an ASCII encoded hex string
-    
-    :param eightbitnumbers: a list of integers
-    :return: a string of ASCII characters
-    """
-    assert type(eightbitnumbers) == list
-    for x in eightbitnumbers:
-        assert type(x) == int
-    
-    outputstring = ""
-    
-    for x in range(len(eightbitnumbers)):
-        outputstring += to_hex(eightbitnumbers[x] >> 4) #select 4 msb from eightbitnumbers[x]
-        outputstring += to_hex(eightbitnumbers[x] & 0xF) #select 4 lsb from eightbitnumbers[x]
-    
-    return outputstring
-
-def bytes_to_char(byteinput):
-    """
-    Converts a list of bytes into a list of ASCII characters
-
-    param byteinput: a list of bytes
-    return a string of ASCII characters
-    """
-    chars=''
-    for x in byteinput:
-        chars+=chr(x)
-    return chars
-
-def valid_character(byteinput):
-    """
-    Checks an list of bytes for valid English characters
-
-    param byteinput: a list of bytes
+    param bytestr: a list of bytes
     return: false if the bytes contain an invalid ASCII character, true otherwise
     """
-    for x in byteinput:
-        if x<=31 or x>=127:
-            if x!=9 and x!=10 and x!=11: # 9 is hotizontal tab, 10 is newline, 11 is vertical tab
-                return False
-    else:
-        return True
-
+    for b in bytestr:
+        if not ord(b) in range(32,128) and not b in ['\t', '\n', '\r']:
+            return False 
+    return True
