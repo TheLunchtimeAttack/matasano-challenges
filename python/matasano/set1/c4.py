@@ -71,4 +71,4 @@ maxscore = max(plaintextscores.values())
 winning_plaintext = [x for x,y in plaintextscores.items() if y ==maxscore]
 
 
-print ("And the winning plaintext is...", winning_plaintext)
+print ("And the winning plaintext is...", winning_plaintext[0])
