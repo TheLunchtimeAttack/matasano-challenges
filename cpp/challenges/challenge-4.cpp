@@ -56,7 +56,7 @@ std::vector<TestString> InitialKeyAndStringPurge(std::vector<std::string> input_
 }
 
 int main() {
-	std::vector<std::string> DataArray = ReadFileContents("4.txt"); // read in the strings
+	std::vector<std::string> DataArray = ReadFileContents("datafiles/4.txt"); // read in the strings
 	std::cout << "Number of inputs: " << DataArray.size() << std::endl;
 	std::vector<TestString> possible_outputs = InitialKeyAndStringPurge(DataArray); // vector of possible strings
 	std::cout << "Number after initial cull: " << possible_outputs.size() << std::endl;
