@@ -1,5 +1,5 @@
 #include "StringTesting.h"
-
+#include <algorithm>
 
 uint8_t TestForNonPrintable(std::string input) {
 	for (uint16_t x = 0; x < input.size(); x++) {

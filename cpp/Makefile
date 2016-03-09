@@ -1,27 +1,24 @@
-CC=g++
-CFLAGS=-std=c++14 -c -Wall
-LDFLAGS=
-LIBHEADERS:=$(shell ls util/*.h)
-LIBS:=$(shell ls util/*.cpp)
-LIBOUT=$(LIBS:.cpp=.o)
-EXECUTABLE:=$(shell ls challenges/challenge-*.cpp | sed 's/.cpp//' | sed 's/challenges\///')
-CHALLENGES:=$(shell ls challenges/challenge-*.cpp)
-CHALLENGEOUT=$(CHALLENGES:.cpp=.o)
-RM=rm -f
+CXX      = g++
+CXXFLAGS = -std=c++14 -Wall -O3
+LDFLAGS  =
 
-new: clean all
+TARGET = $(patsubst challenges/%.cpp,%,$(wildcard challenges/challenge-*.cpp))
+CHAL_SRCS = $(wildcard challenges/*.cpp)
+SRCS   = $(wildcard util/*.cpp)
+OBJS   = $(SRCS:.cpp=.o)
 
-all: $(LIBHEADERS) $(LIBS) $(CHALLENGES) $(EXECUTABLE)
 
-$(EXECUTABLE): $(LIBHEADERS) $(LIBOUT) $(CHALLENGEOUT)
-	$(CC) $(LDFLAGS) challenges/$@.o $(LIBOUT) -o $@
+.PHONY: clean all
 
-.cpp:
-	$(CC) $(CFLAGS) $< -o $@
+all: $(TARGET)
+
+challenge-%: $(OBJS) challenges/challenge-%.cpp
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(LIBOUT) $(CHALLENGEOUT) $(EXECUTABLE)
+	rm -f $(OBJS) $(DEPS) $(TARGET)
 
-rm-exec:
-	$(RM) $(EXECUTABLE)
-
+.SECONDARY: $(OBJS)
