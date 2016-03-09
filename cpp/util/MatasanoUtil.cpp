@@ -27,3 +27,17 @@ std::vector<uint8_t> CreateSingleCharacterXorVector(uint8_t xor_character, uint3
 	return out;
 }
 
+std::vector<uint8_t> RepeatingKeyXor(std::vector<uint8_t> input_vector, std::vector<uint8_t> key) {
+	uint8_t rotation = 0;
+	std::vector<uint8_t> output_vector;
+	
+	for (int i = 0; i < input_vector.size(); i++) {
+		if (rotation == key.size()) {
+			rotation = 0;
+		}
+		output_vector.push_back(input_vector[i] ^ key[rotation]);
+		rotation++;
+	}
+	return output_vector;
+}
+

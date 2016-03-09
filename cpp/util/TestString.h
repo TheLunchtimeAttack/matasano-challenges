@@ -2,8 +2,12 @@
 #include <vector>
 #include <stdint.h>
 
+// styled according to the Google C++ Style guide
+// https://google.github.io/styleguide/cppguide.html
+
 #ifndef TESTSTRING_H
 #define TESTSTRING_H
+
 class TestString {
 private:
 	std::string plain_text;

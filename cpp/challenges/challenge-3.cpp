@@ -56,9 +56,16 @@ int main() {
 	potential_strings = FilterExcessivePunctuation(potential_strings, PUNCTUATION_THRESHOLD);
 	std::cout << "Remaining Keys (excessive punctuation filter): " << potential_strings.size() << std::endl;
 	
-	for (uint16_t i = 0; i < potential_strings.size(); i++) {
-		std::cout << "Key used: " << (unsigned) potential_strings[i].GetKey() << std::endl << potential_strings[i].GetCipherText() << std::endl;
-	}
+	potential_strings = AnalyseLetterFrequencies(potential_strings);
+	
+	int best_string = FindHighestScore(potential_strings);
+	std::cout << "Best String" << std::endl;
+	std::cout << "Key used: " << (unsigned) potential_strings[best_string].GetKey() << std::endl;
+	std::cout << potential_strings[best_string].GetCipherText() << std::endl;
+	
+	//for (uint16_t i = 0; i < potential_strings.size(); i++) {
+	//	std::cout << "Key used: " << (unsigned) potential_strings[i].GetKey() << std::endl << potential_strings[i].GetCipherText() << std::endl;
+	//}
 	
 	std::cout << "Remaining Keys: " << potential_strings.size() << std::endl;
 	return 0;
