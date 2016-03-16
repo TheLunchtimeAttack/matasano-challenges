@@ -177,3 +177,61 @@ def valid_character(byteinput):
     else:
         return True
 
+def base64_to_hex(Base64_chars):
+    """
+    Converts an ASCII string representing a Base64 encoding into
+    an ASCII string representing a hex encoding
+    
+    :param Base64_chars: A base64 encoded string in ASCII
+    :return: A hex encoded string in ASCII
+    """
+    assert type(Base64_chars)==str
+    assert len(Base64_chars)%2==0
+
+# Converts the base64 values into their decimal representations
+# each byte ends up in format 00xxxxxx where 'x' is a significant bit
+    bytes=[]
+    for charin in Base64_chars:
+        charin=ord(charin)
+        if ord('A')<= charin and charin <=ord('Z'):
+            Byte=charin-ord('A') # 'A' = 0 in base64
+        elif ord('a')<= charin and charin <=ord('z'):
+            Byte=charin-ord('a')+26 # 'a' = 26 in base64
+        elif ord('0')<= charin and charin<=ord('9'):
+            Byte=charin-ord('0')+52 # '0' = 52 in base64
+        elif charin==ord('+'):
+            Byte=62 # '+'=62 in base64
+        elif charin==ord('/'):
+            Byte==63 # 
+        elif charin==ord('='): # padding
+            break
+        else:
+            raise ValueError('Invalid Base64 character')
+        bytes.append(Byte)
+# parses the bytestring and changes it to a hex bytestring:
+# 00123456 00123456 -> 00001234 00005612 00003456
+    hex_bytes=[]
+    for i in range(0,len(bytes)-1,2):
+        # 0b00123456 -> 0b00001234:
+        first=bytes[i]>>2
+        hex_bytes.append(first)
+        # 0b00123456, 0b00123456 -> 0b00005612
+        second=((bytes[i] & 0b00000011)<<2) | ((bytes[i+1] & 0b00110000)>>4)
+        hex_bytes.append(second)
+        # 0b00123456 -> 0b00003456
+        third = bytes[i+1] & 0b00001111
+        hex_bytes.append(third)
+
+# converts the single hex bytes into ASCII encoded characters
+# eg 00000001 -> '1', 00001010 -> 'a'
+    hex_str=''
+    for byte in hex_bytes:
+        if 0<= byte and byte <=9:
+            hex_char=chr(byte+ord('0'))
+        elif 10<= byte and byte <=15:
+            hex_char=chr(byte-10+ord('a'))
+        else:
+            raise ValueError(byte, 'not in range')
+        hex_str = hex_str + hex_char
+
+    return hex_str
