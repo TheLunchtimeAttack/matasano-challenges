@@ -151,7 +151,7 @@ def valid_characters(bytestr):
             return False
     return True
 
-def base642byte(strinput):
+def base64_to_bytes(strinput):
     intinput = []
     for i in range(0, len(strinput)):
         if (64 < ord(strinput[i]) < 91):
@@ -166,11 +166,11 @@ def base642byte(strinput):
             intinput.append(63)
     while len(intinput) % 4 != 0:
         intinput.append(0)
-    output = []
+    output = ""
     for x in range(0, len(intinput) , 4):
-        output.append(intinput[x] << 2 |intinput[x+1]>>4)
+        output += (chr(intinput[x] << 2 |intinput[x+1]>>4))
         temp = 0b00001111 & intinput[x +1]
-        output.append( temp << 4 | intinput[x+2]>>2)
+        output += (chr(temp << 4 | intinput[x+2]>>2))
         temp= 0b00000011 & intinput[x+2]
-        output.append(temp<<6 | intinput[x+3])
-     return output
+        output += (chr(temp<<6 | intinput[x+3]))
+    return output
