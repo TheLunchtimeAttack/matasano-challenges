@@ -153,6 +153,7 @@ def valid_characters(bytestr):
 
 def base64_to_bytes(strinput):
     intinput = []
+    padding_bytes = 0
     for i in range(0, len(strinput)):
         if (64 < ord(strinput[i]) < 91):
             intinput.append(ord(strinput[i]) - 65)
@@ -164,13 +165,23 @@ def base64_to_bytes(strinput):
             intinput.append( 62)
         if (ord(strinput[i]) == 47):
             intinput.append(63)
-    while len(intinput) % 4 != 0:
-        intinput.append(0)
+        if (ord(strinput[i]) == 61):
+            intinput.append(0)
+            padding_bytes += 1
+    if len(intinput) % 4 != padding_bytes:
+        ValueError("Incorrect padding.")
     output = ""
-    for x in range(0, len(intinput) , 4):
+    for x in range(0, len(intinput) - 4*(padding_bytes>0) , 4):
         output += (chr(intinput[x] << 2 |intinput[x+1]>>4))
         temp = 0b00001111 & intinput[x +1]
         output += (chr(temp << 4 | intinput[x+2]>>2))
         temp= 0b00000011 & intinput[x+2]
         output += (chr(temp<<6 | intinput[x+3]))
+
+    if padding_bytes > 0:
+        output += (chr(intinput[-4] << 2 |intinput[-3]>>4))
+        temp = 0b00001111 & intinput[-3]
+    if padding_bytes == 1:
+        output += (chr(temp << 4 | intinput[-2]>>2))
+
     return output
