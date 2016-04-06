@@ -11,8 +11,8 @@ if __name__ == "__main__":
     # Instantiate the cipher
     cipher = AES.new(key, AES.MODE_ECB)
 
-    # Covert from base64 to bytes
-    ct = base64_to_bytes(chal_file.read())
+    # Covert from base64 to bytes and encode
+    ct = base64_to_bytes(chal_file.read()).encode('latin-1')
 
     # Perform the decryption
     pt = cipher.decrypt(ct)

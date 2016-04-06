@@ -184,4 +184,4 @@ def base64_to_bytes(strinput):
     if padding_bytes == 1:
         output += (chr(temp << 4 | intinput[-2]>>2))
 
-    return output.encode('latin-1')
+    return output
