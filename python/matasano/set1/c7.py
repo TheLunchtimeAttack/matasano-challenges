@@ -12,7 +12,7 @@ if __name__ == "__main__":
     cipher = AES.new(key, AES.MODE_ECB)
 
     # Covert from base64 to bytes and encode
-    ct = base64_to_bytes(chal_file.read()).encode('latin-1')
+    ct = base64.b64decode(chal_file.read())
 
     # Perform the decryption
     pt = cipher.decrypt(ct)
