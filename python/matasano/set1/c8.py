@@ -1,5 +1,3 @@
-from matasano.util.converters import hex_to_bytestr
-
 if __name__ == "__main__":
 
     chal_file = open("matasano/data/c8.txt", 'r')
